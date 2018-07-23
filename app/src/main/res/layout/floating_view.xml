@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBlackBack"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:id="@+id/floating_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_asr"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="帮我导航去西湖"
+        android:textSize="24sp"
+        android:padding="16dp"
+        android:textColor="@color/colorWhiteText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <fitme.ai.zotyeautoassistant.view.LineWaveVoiceView
+        android:id="@+id/line_wave_view"
+        app:voiceLineColor="@color/color_1EC4BD"
+        app:voiceLineWidth="8dp"
+        app:voiceTextColor="@color/color_666666"
+        app:voiceTextSize="10dp"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="30dp"
+        android:layout_height="50dp" />
+</LinearLayout>
