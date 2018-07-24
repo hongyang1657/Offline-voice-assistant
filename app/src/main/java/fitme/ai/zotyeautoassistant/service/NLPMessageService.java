@@ -17,6 +17,8 @@ import org.tensorflow.contrib.android.TensorFlowInferenceInterface;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -25,6 +27,7 @@ import ai.fitme.notification.client.service.MsgHandleService;
 import ai.fitme.notification.common.message.ConnectMessage;
 import fitme.ai.zotyeautoassistant.MyApplication;
 import fitme.ai.zotyeautoassistant.api.ApiManager;
+import fitme.ai.zotyeautoassistant.bean.DictionaryBean;
 import fitme.ai.zotyeautoassistant.bean.MessageBody;
 import fitme.ai.zotyeautoassistant.bean.MessageGet;
 import fitme.ai.zotyeautoassistant.bean.Messages;
@@ -34,6 +37,7 @@ import fitme.ai.zotyeautoassistant.presenter.MessageArrivedPresenter;
 import fitme.ai.zotyeautoassistant.presenter.MessageCreatPresenter;
 import fitme.ai.zotyeautoassistant.presenter.MessageGetPresenter;
 import fitme.ai.zotyeautoassistant.utils.ChatItemTypeConsts;
+import fitme.ai.zotyeautoassistant.utils.DictionaryGetUtils;
 import fitme.ai.zotyeautoassistant.utils.L;
 import fitme.ai.zotyeautoassistant.utils.Mac;
 import fitme.ai.zotyeautoassistant.utils.ResultDealUtils;
@@ -111,6 +115,7 @@ public class NLPMessageService extends Service implements IMessageManageService{
     private float[] query_Pe = ResultDealUtils.getQuery_tPe(this);
     private TensorFlowInferenceInterface tensorFlowInferenceSlot;
     private TensorFlowInferenceInterface tensorFlowInferenceIntent;
+    private DictionaryBean dictionaryBean;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -144,6 +149,23 @@ public class NLPMessageService extends Service implements IMessageManageService{
         InputStream slotPath = getClass().getResourceAsStream("/assets/slot_model.pb");
         tensorFlowInferenceIntent = new TensorFlowInferenceInterface(intentPath);
         tensorFlowInferenceSlot = new TensorFlowInferenceInterface(slotPath);
+
+        //获取词典
+        Map<String, ?> intent2indexMap = DictionaryGetUtils.getIntent2indexMap(this);
+        Map<String, ?> index2intentMap = DictionaryGetUtils.getIndex2intentMap(this);
+        Map<String, ?> slot2indexMap = DictionaryGetUtils.getSlot2indexMap(this);
+        Map<String, ?> index2slotMap = DictionaryGetUtils.getIndex2slotMap(this);
+        Map<String, ?> char2indexMap = DictionaryGetUtils.getChar2indexMap(this);
+        Map<String, ?> index2charMap = DictionaryGetUtils.getIndex2charMap(this);
+        dictionaryBean = new DictionaryBean();
+        Map<String,Map<String,?>> map = new HashMap<>();
+        map.put("intent2indexMap",intent2indexMap);
+        map.put("index2intentMap",index2intentMap);
+        map.put("slot2indexMap",slot2indexMap);
+        map.put("index2slotMap",index2slotMap);
+        map.put("char2indexMap",char2indexMap);
+        map.put("index2charMap",index2charMap);
+        dictionaryBean.setDictionary(map);
     }
 
     private void initPresenter(){
@@ -220,12 +242,11 @@ public class NLPMessageService extends Service implements IMessageManageService{
                     @Override
                     public void run() {
                         //本地模型预测
-                        String u2a_speech = ResultDealUtils.modelForecast(getApplicationContext(), asrResponse, "u2a_speech", "123", context_Pe, query_Pe, tensorFlowInferenceIntent, tensorFlowInferenceSlot);
+                        ResultBean resultBean = ResultDealUtils.modelForecast(getApplicationContext(), asrResponse, "u2a_speech", "123", context_Pe, query_Pe, tensorFlowInferenceIntent, tensorFlowInferenceSlot,dictionaryBean);
                         Gson gson = new GsonBuilder().setPrettyPrinting()//打开之后log打印会出现空格
                                 .disableHtmlEscaping()
                                 .create();
-                        ResultBean resultBean = gson.fromJson(u2a_speech, ResultBean.class);
-                        L.i("本地模型预测结果speech:"+ u2a_speech);
+                        L.i("本地模型预测结果speech:"+ gson.toJson(resultBean));
                         sendBroadcast(null,0,LOG,gson.toJson(resultBean));
 
                         //隐藏floatingView

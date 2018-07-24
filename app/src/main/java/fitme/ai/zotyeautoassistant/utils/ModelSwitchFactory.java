@@ -3,13 +3,16 @@ package fitme.ai.zotyeautoassistant.utils;
 import android.content.Context;
 import android.util.Log;
 
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import fitme.ai.zotyeautoassistant.bean.DictionaryBean;
 import fitme.ai.zotyeautoassistant.bean.Events;
 import fitme.ai.zotyeautoassistant.bean.SlotReturnBean;
 
@@ -483,16 +486,17 @@ public class ModelSwitchFactory {
      * @param chars   传入的数据源
      * @return
      */
-    public static List<List<Integer>> Intent2Vector(Context context, List<List<String>> chars) {
+    public static List<List<Integer>> Intent2Vector(Context context, List<List<String>> chars,DictionaryBean dictionaryBean) {
         //定义返回数组
         List<List<Integer>> resultList = new ArrayList<>();
         //获取词典
-        Map<String, ?> intent2indexMap = DictionaryGetUtils.getIntent2indexMap(context);
-        Map<String, ?> index2intentMap = DictionaryGetUtils.getIndex2intentMap(context);
-        Map<String, ?> slot2indexMap = DictionaryGetUtils.getSlot2indexMap(context);
-        Map<String, ?> index2slotMap = DictionaryGetUtils.getIndex2slotMap(context);
-        Map<String, ?> char2indexMap = DictionaryGetUtils.getChar2indexMap(context);
-        Map<String, ?> index2charMap = DictionaryGetUtils.getIndex2charMap(context);
+        Map<String, Map<String, ?>> dictionary = dictionaryBean.getDictionary();
+        Map<String, ?> intent2indexMap = dictionary.get("intent2indexMap");
+        Map<String, ?> index2intentMap = dictionary.get("index2intentMap");
+        Map<String, ?> slot2indexMap = dictionary.get("slot2indexMap");
+        Map<String, ?> index2slotMap = dictionary.get("index2slotMap");
+        Map<String, ?> char2indexMap = dictionary.get("char2indexMap");
+        Map<String, ?> index2charMap = dictionary.get("index2charMap");
 
         //处理intent
         //获取context_chars和query_chars
@@ -571,17 +575,18 @@ public class ModelSwitchFactory {
      * @param target_slot_name 第一步intent预测出的intent中的slots
      * @return
      */
-    public static SlotReturnBean Slot2Vector(Context context, List<List<String>> chars, String target_intent, String target_slot_name) {
+    public static SlotReturnBean Slot2Vector(Context context, List<List<String>> chars, String target_intent, String target_slot_name, DictionaryBean dictionaryBean) {
 
         //定义返回的结果对象
         SlotReturnBean returnBean = new SlotReturnBean();
         //获取词典
-        Map<String, ?> intent2indexMap = DictionaryGetUtils.getIntent2indexMap(context);
-        Map<String, ?> index2intentMap = DictionaryGetUtils.getIndex2intentMap(context);
-        Map<String, ?> slot2indexMap = DictionaryGetUtils.getSlot2indexMap(context);
-        Map<String, ?> index2slotMap = DictionaryGetUtils.getIndex2slotMap(context);
-        Map<String, ?> char2indexMap = DictionaryGetUtils.getChar2indexMap(context);
-        Map<String, ?> index2charMap = DictionaryGetUtils.getIndex2charMap(context);
+        Map<String, Map<String, ?>> dictionary = dictionaryBean.getDictionary();
+        Map<String, ?> intent2indexMap = dictionary.get("intent2indexMap");
+        Map<String, ?> index2intentMap = dictionary.get("index2intentMap");
+        Map<String, ?> slot2indexMap = dictionary.get("slot2indexMap");
+        Map<String, ?> index2slotMap = dictionary.get("index2slotMap");
+        Map<String, ?> char2indexMap = dictionary.get("char2indexMap");
+        Map<String, ?> index2charMap = dictionary.get("index2charMap");
 
         //定义用于数据转换的数组
         List<String> baseChars = new ArrayList<>();
@@ -635,6 +640,7 @@ public class ModelSwitchFactory {
         int indexFromIntent = DictionaryValueGetUtils.getIndexFromIntent(intent2indexMap, target_intent);
         int indexFromSlot = DictionaryValueGetUtils.getIndexFromSlot(slot2indexMap, target_slot_name);
 
+        Log.i("aaa","预测到的intent和solt角标：" + target_intent + "####" + indexFromIntent + "#####" + target_slot_name + "###" + indexFromSlot);
         x_passage.addAll(chars_seq);
         x_intent.add(indexFromIntent);
         x_slot_name.add(indexFromSlot);

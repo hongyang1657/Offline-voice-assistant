@@ -12,9 +12,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fitme.ai.zotyeautoassistant.bean.DictionaryBean;
 import fitme.ai.zotyeautoassistant.bean.Events;
 import fitme.ai.zotyeautoassistant.bean.ResultBean;
 import fitme.ai.zotyeautoassistant.bean.SlotReturnBean;
@@ -31,14 +33,15 @@ public class ResultDealUtils {
      * @param index
      * @return
      */
-    public static String IntentDeal(Context context, String index) {
+    public static String IntentDeal(Context context, String index,DictionaryBean dictionaryBean) {
         //获取词典
-        Map<String, ?> intent2indexMap = DictionaryGetUtils.getIntent2indexMap(context);
-        Map<String, ?> index2intentMap = DictionaryGetUtils.getIndex2intentMap(context);
-        Map<String, ?> slot2indexMap = DictionaryGetUtils.getSlot2indexMap(context);
-        Map<String, ?> index2slotMap = DictionaryGetUtils.getIndex2slotMap(context);
-        Map<String, ?> char2indexMap = DictionaryGetUtils.getChar2indexMap(context);
-        Map<String, ?> index2charMap = DictionaryGetUtils.getIndex2charMap(context);
+        Map<String, Map<String, ?>> dictionary = dictionaryBean.getDictionary();
+        Map<String, ?> intent2indexMap = dictionary.get("intent2indexMap");
+        Map<String, ?> index2intentMap = dictionary.get("index2intentMap");
+        Map<String, ?> slot2indexMap = dictionary.get("slot2indexMap");
+        Map<String, ?> index2slotMap = dictionary.get("index2slotMap");
+        Map<String, ?> char2indexMap = dictionary.get("char2indexMap");
+        Map<String, ?> index2charMap = dictionary.get("index2charMap");
 
         return DictionaryValueGetUtils.getIntentFromIndex(index2intentMap, index);
     }
@@ -146,7 +149,7 @@ public class ResultDealUtils {
      * @param tensorflowInterfaceSlot     slot预测的tensorflow对象
      * @return
      */
-    public static String modelForecast(Context ct, String requestString, String type, String message_id, float[] context_Pe, float[] query_Pe, TensorFlowInferenceInterface tensorflowInterfaceIntent, TensorFlowInferenceInterface tensorflowInterfaceSlot) {
+    public static ResultBean modelForecast(Context ct, String requestString, String type, String message_id, float[] context_Pe, float[] query_Pe, TensorFlowInferenceInterface tensorflowInterfaceIntent, TensorFlowInferenceInterface tensorflowInterfaceSlot,DictionaryBean dictionaryBean) {
         //定义返回的数据
         ResultBean resultBean = new ResultBean();
         List<String> slot = new ArrayList<>();
@@ -157,7 +160,7 @@ public class ResultDealUtils {
         List<List<String>> chars = ModelSwitchFactory.event2string(eventses);
         Log.i("aaa", chars.toString() + "长度：" + chars.size());
         //构建intent预测所需参数
-        List<List<Integer>> intent2VectorResult = ModelSwitchFactory.Intent2Vector(ct, chars);
+        List<List<Integer>> intent2VectorResult = ModelSwitchFactory.Intent2Vector(ct, chars,dictionaryBean);
         List<Integer> x_context = intent2VectorResult.get(0);
         List<Integer> x_query = intent2VectorResult.get(1);
         Log.i("aaa", x_context.toString() + "长度：" + x_context.size());
@@ -189,7 +192,7 @@ public class ResultDealUtils {
 
         //处理intent结果，得到Solt的请求的参数
         String intentIndex = String.valueOf(predict_intent[0]);
-        String intentDeal = ResultDealUtils.IntentDeal(ct, intentIndex);
+        String intentDeal = ResultDealUtils.IntentDeal(ct, intentIndex,dictionaryBean);
         Log.i("aaa", "得到的intent：" + intentDeal);
         if (!"未查到对应的intent".equals(intentDeal)) {
             String[] split = intentDeal.replaceAll("\\<", "-").replaceAll("\\>", "-").split("-");
@@ -201,7 +204,7 @@ public class ResultDealUtils {
                             continue;//去除数组中的空串
                         }
                         //构建solt预测所需参数
-                        SlotReturnBean slotReturnBean = ModelSwitchFactory.Slot2Vector(ct, chars, intentDeal, split[i]);
+                        SlotReturnBean slotReturnBean = ModelSwitchFactory.Slot2Vector(ct, chars, intentDeal, split[i],dictionaryBean);
                         List<Integer> x_passage = slotReturnBean.getX_passage();
                         List<Integer> x_intent = slotReturnBean.getX_intent();
                         List<Integer> x_slot_name = slotReturnBean.getX_slot_name();
@@ -255,7 +258,7 @@ public class ResultDealUtils {
                 resultBean.setFrom_message_id(message_id);
                 resultBean.setIntent(intentDeal);
                 resultBean.setSlot(slot);
-                return new Gson().toJson(resultBean);
+                return resultBean;
             } else {
                 //没有slot
                 Log.i("aaa", "slot为空直接返回intent和空slot");
@@ -263,7 +266,7 @@ public class ResultDealUtils {
                 resultBean.setFrom_message_id(message_id);
                 resultBean.setIntent(intentDeal);
                 resultBean.setSlot(slot);
-                return new Gson().toJson(resultBean);
+                return resultBean;
             }
         } else {
             Log.i("aaa", "未查到对应的intent");
@@ -271,7 +274,7 @@ public class ResultDealUtils {
             resultBean.setFrom_message_id(message_id);
             resultBean.setIntent(intentDeal);
             resultBean.setSlot(slot);
-            return new Gson().toJson(resultBean);
+            return resultBean;
         }
     }
 }
