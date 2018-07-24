@@ -18,6 +18,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!--悬浮窗权限-->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!--用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <!--用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!--用于申请调用A-GPS模块-->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <!--用于访问GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:name=".MyApplication"
@@ -41,8 +49,8 @@
         <service android:name=".service.NLPMessageService"/>
         <service android:name=".service.MusicPlayerService"/>
 
-        <!--高德定位sdk-->
-        <meta-data android:name="com.amap.api.v2.apikey" android:value="3fb52e137ed99a695333a9e9dd672090">
+        <!--高德定位sdk     fec1e62c56aa001526bf7bffbb3ebe21      3fb52e137ed99a695333a9e9dd672090-->
+        <meta-data android:name="com.amap.api.v2.apikey" android:value="fec1e62c56aa001526bf7bffbb3ebe21">
         </meta-data>
         <service android:name="com.amap.api.location.APSService"></service>
     </application>

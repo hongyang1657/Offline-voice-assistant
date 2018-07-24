@@ -112,15 +112,15 @@ public class AsrService extends Service implements IAppendAudio {
                 super.run();
                 err = libisssr.destroy();
                 err = libisssr.setMachineCode(mMechineCode);
-                //Log.i(TAG, "err1111: "+err);
+                Log.i(TAG, "err1111: "+err);
                 err = libisssr.activate(strPath);
-                //Log.i(TAG, "ActivateAsr:libisssr.activate: "+err);
+                Log.i(TAG, "ActivateAsr:libisssr.activate: "+err);
                 err = libisssr.createEx(0, strPath, mSRListener);
-                //Log.i(TAG, "err3333: "+err);
+                Log.i(TAG, "err3333: "+err);
                 err = libisssr.setParam(libisssr.ISS_SR_PARAM_TRACE_LEVEL,"2");
-                //Log.i(TAG, "err2222: "+err);
+                Log.i(TAG, "err2222: "+err);
                 err = libisssr.setParam(libisssr.ISS_SR_PARAM_RESPONSE_TIMEOUT, "20000");
-                //Log.i(TAG, "err4444: "+err);
+                Log.i(TAG, "err4444: "+err);
             }
         }.start();
 
