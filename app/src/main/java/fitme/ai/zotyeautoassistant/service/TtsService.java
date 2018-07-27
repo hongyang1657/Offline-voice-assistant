@@ -121,7 +121,7 @@ public class TtsService extends Service{
             public void playEnd() {
                 Log.i(TAG, "playEnd:播报完成 ");
                 //sendBroadcast(TTS_STATE,TTS_PLAY_END);
-                MyApplication.getInstance().getmFloatingView().hide();
+                //MyApplication.getInstance().getmFloatingView().hide();
             }
         });
 

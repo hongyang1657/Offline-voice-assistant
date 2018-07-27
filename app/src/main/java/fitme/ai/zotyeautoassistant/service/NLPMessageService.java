@@ -67,7 +67,7 @@ import static java.lang.Thread.sleep;
 
 public class NLPMessageService extends Service implements IMessageManageService{
 
-    private boolean useSocket = true;   //是否使用socket获取消息
+    private boolean useSocket = false;   //是否使用socket获取消息
     //轮询获取消息
     private MessageGetPresenter messageGetPresenter;
     //消息到达 Socket不需要调用此接口
@@ -252,7 +252,7 @@ public class NLPMessageService extends Service implements IMessageManageService{
                         //隐藏floatingView
                         try {
                             sleep(5000);
-                            MyApplication.getInstance().getmFloatingView().hide();
+                            //MyApplication.getInstance().getmFloatingView().hide();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -262,7 +262,7 @@ public class NLPMessageService extends Service implements IMessageManageService{
             }
             switch (asrState){
                 case ASR_STATE_RESPONSE_TIMEOUT:
-                    MyApplication.getInstance().getmFloatingView().hide();
+                    //MyApplication.getInstance().getmFloatingView().hide();
                     break;
                 case ASR_STATE_SPEECH_START:
 
@@ -334,7 +334,7 @@ public class NLPMessageService extends Service implements IMessageManageService{
                             super.run();
                             try {
                                 sleep(5000);
-                                MyApplication.getInstance().getmFloatingView().hide();
+                                //MyApplication.getInstance().getmFloatingView().hide();
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -397,7 +397,7 @@ public class NLPMessageService extends Service implements IMessageManageService{
 
     @Override
     public void getMessageResp(MessageGet messageGet) {
-        //L.i("消息中心http:"+new Gson().toJson(messageGet));
+        L.i("消息中心http:"+new Gson().toJson(messageGet));
         messageResManager(messageGet);
     }
 

@@ -155,6 +155,8 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         etAccount = findViewById(R.id.et_account);
         etPassword = findViewById(R.id.et_password);
         tvLog = findViewById(R.id.tv_log);
+        SharedPreferencesUtils.getInstance().setIntKeyValue(SPConstants.SP_AYAH_LONGTITUDE,1202106130);
+        SharedPreferencesUtils.getInstance().setIntKeyValue(SPConstants.SP_AYAH_LATITUDE,302644590);
     }
 
     private void initActivateService(){
