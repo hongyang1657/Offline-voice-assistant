@@ -474,3 +474,4 @@ public class NLPMessageService extends Service implements IMessageManageService{
     }
 
 }
+
