@@ -53,6 +53,8 @@ public class ApiManager {
     private static final String MEDIA_PLAYER_URL = "http://contentservice."+ HttpConstant.INSTANCE_NAME+"."+HttpConstant.DOMAIN_NAME+":"+HttpConstant.DOMAIN_PORT;
     //智能硬件
     private static final String DEVICE_CONTROL_URL= "http://smarthardwarecontrol."+ HttpConstant.INSTANCE_NAME+"."+HttpConstant.DOMAIN_NAME+":"+HttpConstant.DOMAIN_PORT;
+    //智能场景
+    private static final String SMART_SCENE_URL = "http://smartscen."+ HttpConstant.INSTANCE_NAME+"."+HttpConstant.DOMAIN_NAME+":"+HttpConstant.DOMAIN_PORT;
     //socket 消息推送
     public static final String SOCKET_NOTIFICATION_IP = "pushserver."+HttpConstant.INSTANCE_NAME+"."+HttpConstant.DOMAIN_NAME;
     public static final int SOCKET_NOTIFICATION_PORT = AllocatePortUtil.allocatePort(HttpConstant.INSTANCE_NAME+"pushserver");
@@ -137,5 +139,14 @@ public class ApiManager {
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .build();
     public static final ApiService deviceControlService = retrofit_device_control.create(ApiService.class);
+
+    //硬件场景控制
+    private static final Retrofit retrofit_smart_scene = new Retrofit.Builder()
+            .baseUrl(SMART_SCENE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+            .build();
+    public static final ApiService smartSceneService = retrofit_smart_scene.create(ApiService.class);
 
 }

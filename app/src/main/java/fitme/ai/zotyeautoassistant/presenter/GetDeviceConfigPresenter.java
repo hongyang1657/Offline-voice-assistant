@@ -5,6 +5,7 @@ import fitme.ai.zotyeautoassistant.bean.DeviceConfigBean;
 import fitme.ai.zotyeautoassistant.model.GetDeviceConfigModel;
 import fitme.ai.zotyeautoassistant.presenter.impl.IGetDeviceConfigPresenter;
 import fitme.ai.zotyeautoassistant.view.impl.ILoginFragmentView;
+import fitme.ai.zotyeautoassistant.view.impl.IMessageManageService;
 
 /**
  * Created by hongy on 2017/12/22.
@@ -13,10 +14,10 @@ import fitme.ai.zotyeautoassistant.view.impl.ILoginFragmentView;
 public class GetDeviceConfigPresenter implements IGetDeviceConfigPresenter,GetDeviceConfigModel.getDeviceConfigListener{
 
     private GetDeviceConfigModel getDeviceConfigModel;
-    private ILoginFragmentView iLoginFragmentView;
+    private IMessageManageService iMessageManageService;
 
-    public GetDeviceConfigPresenter(ILoginFragmentView iLoginFragmentView) {
-        this.iLoginFragmentView = iLoginFragmentView;
+    public GetDeviceConfigPresenter(IMessageManageService iMessageManageService) {
+        this.iMessageManageService = iMessageManageService;
         getDeviceConfigModel = new GetDeviceConfigModel(this);
     }
 
@@ -27,7 +28,7 @@ public class GetDeviceConfigPresenter implements IGetDeviceConfigPresenter,GetDe
 
     @Override
     public void onSucess(DeviceConfigBean deviceConfigBean) {
-        iLoginFragmentView.getDeviceConfig(deviceConfigBean);
+        iMessageManageService.getDeviceConfig(deviceConfigBean);
     }
 
 

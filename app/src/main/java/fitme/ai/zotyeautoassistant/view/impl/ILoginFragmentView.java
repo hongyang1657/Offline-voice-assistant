@@ -43,9 +43,6 @@ public interface ILoginFragmentView {
 
     void showTokenFailed(Throwable e);
 
-    void getDeviceConfig(DeviceConfigBean responseBody);
-
-
     void checkToken(String userId, CheckToken jsonObject);
 
     void showAccountGet(AccountGet accountGet);

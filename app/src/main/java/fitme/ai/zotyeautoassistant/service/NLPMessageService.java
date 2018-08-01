@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 
 import org.tensorflow.contrib.android.TensorFlowInferenceInterface;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -27,15 +28,18 @@ import ai.fitme.notification.client.service.MsgHandleService;
 import ai.fitme.notification.common.message.ConnectMessage;
 import fitme.ai.zotyeautoassistant.MyApplication;
 import fitme.ai.zotyeautoassistant.api.ApiManager;
+import fitme.ai.zotyeautoassistant.bean.DeviceConfigBean;
 import fitme.ai.zotyeautoassistant.bean.DictionaryBean;
 import fitme.ai.zotyeautoassistant.bean.MessageBody;
 import fitme.ai.zotyeautoassistant.bean.MessageGet;
 import fitme.ai.zotyeautoassistant.bean.Messages;
 import fitme.ai.zotyeautoassistant.bean.ResultBean;
 import fitme.ai.zotyeautoassistant.bean.Status;
+import fitme.ai.zotyeautoassistant.presenter.GetDeviceConfigPresenter;
 import fitme.ai.zotyeautoassistant.presenter.MessageArrivedPresenter;
 import fitme.ai.zotyeautoassistant.presenter.MessageCreatPresenter;
 import fitme.ai.zotyeautoassistant.presenter.MessageGetPresenter;
+import fitme.ai.zotyeautoassistant.presenter.SmartSceneControlPresenter;
 import fitme.ai.zotyeautoassistant.utils.ChatItemTypeConsts;
 import fitme.ai.zotyeautoassistant.utils.DictionaryGetUtils;
 import fitme.ai.zotyeautoassistant.utils.L;
@@ -48,6 +52,7 @@ import fitme.ai.zotyeautoassistant.utils.UnicodeUtil;
 import fitme.ai.zotyeautoassistant.utils.VolumeUtil;
 import fitme.ai.zotyeautoassistant.view.impl.IMessageManageService;
 import io.netty.channel.Channel;
+import okhttp3.ResponseBody;
 
 import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_RESPONSE;
 import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE;
@@ -75,6 +80,9 @@ public class NLPMessageService extends Service implements IMessageManageService{
     private MessageArrivedPresenter messageArrivedPresenter;
     //创建新消息
     private MessageCreatPresenter messageCreatPresenter;
+    private SmartSceneControlPresenter smartSceneControlPresenter;
+    //获取设备配置信息
+    private GetDeviceConfigPresenter getDeviceConfigPresenter;
     private MBroadcastReceiver mBroadcastReceiver;
     private ExecutorService executorService;
 
@@ -176,6 +184,8 @@ public class NLPMessageService extends Service implements IMessageManageService{
         messageGetPresenter = new MessageGetPresenter(this);
         messageArrivedPresenter = new MessageArrivedPresenter(this);
         messageCreatPresenter = new MessageCreatPresenter(this);
+        smartSceneControlPresenter = new SmartSceneControlPresenter(this);
+        getDeviceConfigPresenter = new GetDeviceConfigPresenter(this);
 
         socketHandler = new SocketHandler(this);
         //注册广播
@@ -240,22 +250,27 @@ public class NLPMessageService extends Service implements IMessageManageService{
                 }.start();
             }
             if (null!=asrResponse&&!asrResponse.equals("")){
-                messageCreatPresenter.messageCreat(asrResponse,context);  //新增消息
+                if (MyApplication.getInstance().getSceneSpeechs().contains(asrResponse)){
+                    L.i("测试speechs：语句中包含了拦截词"+asrResponse);
+                    smartSceneControlPresenter.sceneActivate(asrResponse,context);
+                }else {
+                    messageCreatPresenter.messageCreat(asrResponse,context);  //新增消息
+                    executorService.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            //本地模型预测
+                            ResultBean resultBean = ResultDealUtils.modelForecast(getApplicationContext(), asrResponse, "u2a_speech", "123", context_Pe, query_Pe, tensorFlowInferenceIntent, tensorFlowInferenceSlot,dictionaryBean);
+                            Gson gson = new GsonBuilder().setPrettyPrinting()//打开之后log打印会出现空格
+                                    .disableHtmlEscaping()
+                                    .create();
+                            L.i("本地模型预测结果speech:"+ gson.toJson(resultBean));
+                            sendBroadcast(null,0,LOG_LOCAL,gson.toJson(resultBean));
+                            
+                        }
+                    });
+                }
 
-                executorService.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        //本地模型预测
-                        ResultBean resultBean = ResultDealUtils.modelForecast(getApplicationContext(), asrResponse, "u2a_speech", "123", context_Pe, query_Pe, tensorFlowInferenceIntent, tensorFlowInferenceSlot,dictionaryBean);
-                        Gson gson = new GsonBuilder().setPrettyPrinting()//打开之后log打印会出现空格
-                                .disableHtmlEscaping()
-                                .create();
-                        L.i("本地模型预测结果speech:"+ gson.toJson(resultBean));
-                        sendBroadcast(null,0,LOG_LOCAL,gson.toJson(resultBean));
 
-
-                    }
-                });
 
             }
             switch (asrState){
@@ -346,7 +361,7 @@ public class NLPMessageService extends Service implements IMessageManageService{
                     L.i("音频Intent:"+intent);
                     if ("配置有变更".equals(intent)){
                         //TODO 请求获取新的配置信息
-
+                        getDeviceConfigPresenter.getDeviceConfig();
                     } else if ("暂停播放".equals(intent)){
                         //TODO 暂停播放
                         playingmusic(MusicPlayerService.STOP_MUSIC,url,0);
@@ -380,6 +395,7 @@ public class NLPMessageService extends Service implements IMessageManageService{
                 }else if (ChatItemTypeConsts.SPEECH_TYPE_AUTO_U2A_SPEECH.equals(messageType)){
                     L.i("messageType：SPEECH_TYPE_AUTO_U2A_SPEECH："+new Gson().toJson(message.getMessage_body()));
                     //TODO 收到speech后发出去
+                    messageCreatPresenter.messageCreat(message.getMessage_body().getSpeech(),this);
                 }
             }
         }
@@ -415,6 +431,25 @@ public class NLPMessageService extends Service implements IMessageManageService{
             nowTime = 0;
             handler.removeCallbacks(task);
             handler.post(task);
+        }
+    }
+
+    @Override
+    public void getSceneActivate(ResponseBody responseBody) {
+        try {
+            L.i("智能场景控制："+responseBody.string());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getDeviceConfig(DeviceConfigBean deviceConfigBean) {
+        L.i("获取指定交互设备的配置信息:"+new Gson().toJson(deviceConfigBean));
+        int speechLength = deviceConfigBean.getDevice_config()[0].getUser_config().getSpeechs().length;
+        for (int i=0;i<speechLength;i++){
+            L.i("拦截词："+deviceConfigBean.getDevice_config()[0].getUser_config().getSpeechs()[i].getSpeech());
+            MyApplication.getInstance().getSceneSpeechs().add(deviceConfigBean.getDevice_config()[0].getUser_config().getSpeechs()[i].getSpeech());
         }
     }
 

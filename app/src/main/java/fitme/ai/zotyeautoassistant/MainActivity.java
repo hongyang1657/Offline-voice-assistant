@@ -88,8 +88,6 @@ public class MainActivity extends Activity implements ILoginFragmentView{
     private DeviceSearchPresenter deviceSearchPresenter;
     //上传音箱的配置信息
     private DeviceConfigPutPresenter deviceConfigPutPresenter;
-    //获取设备配置信息
-    private GetDeviceConfigPresenter getDeviceConfigPresenter;
 
     private boolean isLocalLog = false;
 
@@ -178,7 +176,6 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         deviceInfoUploadPresenter = new DeviceInfoUploadPresenter(this);
         deviceSearchPresenter = new DeviceSearchPresenter(this);
         deviceConfigPutPresenter = new DeviceConfigPutPresenter(this);
-        getDeviceConfigPresenter = new GetDeviceConfigPresenter(this);
 
         //广播接收
         mBroadcastReceiver = new MBroadcastReceiver();
@@ -375,10 +372,7 @@ public class MainActivity extends Activity implements ILoginFragmentView{
 
     }
 
-    @Override
-    public void getDeviceConfig(DeviceConfigBean responseBody) {
 
-    }
 
     @Override
     public void checkToken(String userId, CheckToken jsonObject) {
