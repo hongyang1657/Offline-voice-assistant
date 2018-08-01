@@ -11,6 +11,7 @@ public class Contansts {
     public static final String TTS_CONTROL = "tts_control";
     public static final String TTS_STATE = "tts_state";
     public static final String LOG = "log";
+    public static final String LOG_LOCAL = "log_local";
     public static final String LOGIN_STATE = "login_state";
 
     //唤醒状态

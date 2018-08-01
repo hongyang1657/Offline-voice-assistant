@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -50,6 +52,10 @@ import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_RESPONSE;
 import static fitme.ai.zotyeautoassistant.utils.Contansts.FITME_SERVICE_COMMUNICATION;
 import static fitme.ai.zotyeautoassistant.utils.Contansts.LOG;
 import static fitme.ai.zotyeautoassistant.utils.Contansts.LOGIN_STATE;
+import static fitme.ai.zotyeautoassistant.utils.Contansts.LOG_LOCAL;
+import static fitme.ai.zotyeautoassistant.utils.Contansts.TTS_CONTROL;
+import static fitme.ai.zotyeautoassistant.utils.Contansts.TTS_START;
+import static fitme.ai.zotyeautoassistant.utils.Contansts.TTS_TEXT;
 
 /**
  * 用于众泰车机的语音交互程序
@@ -66,7 +72,7 @@ public class MainActivity extends Activity implements ILoginFragmentView{
     private Intent intentMessageService = null;
     private ScrollView scrollView;
     private EditText etAccount,etPassword;
-    private TextView tvLog;
+    private TextView tvLog,tvLogLocal;
     private Context mContext;
     //获取Token
     private TokenPresenter mTokenPresenter;
@@ -85,17 +91,21 @@ public class MainActivity extends Activity implements ILoginFragmentView{
     //获取设备配置信息
     private GetDeviceConfigPresenter getDeviceConfigPresenter;
 
+    private boolean isLocalLog = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         executorService = Executors.newCachedThreadPool(); //线程池
         findViewById(R.id.bt_show_float).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MyApplication.getInstance().getmFloatingView().show();
+                sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"测试播放，今天天气很好");
             }
         });
         findViewById(R.id.bt_hide_float).setOnClickListener(new View.OnClickListener() {
@@ -114,8 +124,26 @@ public class MainActivity extends Activity implements ILoginFragmentView{
                         mGetUserIdByMobilePresenter.getUserIdByMobile(etAccount.getText().toString().trim());
                     }
                 });
-
-
+            }
+        });
+        findViewById(R.id.bt_switch).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isLocalLog){
+                    tvLogLocal.setVisibility(View.GONE);
+                    tvLog.setVisibility(View.VISIBLE);
+                    isLocalLog = false;
+                }else {
+                    tvLog.setVisibility(View.GONE);
+                    tvLogLocal.setVisibility(View.VISIBLE);
+                    isLocalLog = true;
+                }
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                    }
+                });
             }
         });
         //初始化
@@ -129,6 +157,15 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         mContext = this;
     }
 
+
+    //发送广播
+    private void sendBroadcast(String key1,int value1,String key2,String value2){
+        Intent intent = new Intent();
+        intent.setAction(FITME_SERVICE_COMMUNICATION);
+        intent.putExtra(key1,value1);
+        intent.putExtra(key2,value2);
+        sendBroadcast(intent);
+    }
 
 
     //初始化接口
@@ -154,7 +191,8 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         scrollView = findViewById(R.id.scroll_view);
         etAccount = findViewById(R.id.et_account);
         etPassword = findViewById(R.id.et_password);
-        tvLog = findViewById(R.id.tv_log);
+        tvLog = findViewById(R.id.tv_log_cloud);
+        tvLogLocal = findViewById(R.id.tv_log_local);
         SharedPreferencesUtils.getInstance().setIntKeyValue(SPConstants.SP_AYAH_LONGTITUDE,1202106130);
         SharedPreferencesUtils.getInstance().setIntKeyValue(SPConstants.SP_AYAH_LATITUDE,302644590);
     }
@@ -201,7 +239,9 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         @Override
         public void onReceive(Context context, Intent intent) {
             String log = intent.getStringExtra(LOG);
+            String log_local = intent.getStringExtra(LOG_LOCAL);
             String asrResponse = intent.getStringExtra(ASR_RESPONSE);
+            //云端log
             if (null!=log&&!"{\"messages\":[],\"status\":\"success\"}".equals(log)){
                 if (tvLog.getTextSize() < 50000){
                     tvLog.append(formatJson(log)+"\n");
@@ -216,8 +256,24 @@ public class MainActivity extends Activity implements ILoginFragmentView{
                     tvLog.setText(formatJson(log)+"\n");
                 }
             }
+            //本地log
+            if (null!=log_local&&!"{\"messages\":[],\"status\":\"success\"}".equals(log_local)){
+                if (tvLogLocal.getTextSize() < 50000){
+                    tvLogLocal.append(formatJson(log_local)+"\n");
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                        }
+                    });
+
+                }else {
+                    tvLogLocal.setText(formatJson(log_local)+"\n");
+                }
+            }
             if (null!=asrResponse&&!asrResponse.equals("")){
                 tvLog.append("\nASR:"+asrResponse+"\n");
+                tvLogLocal.append("\nASR:"+asrResponse+"\n");
             }
         }
     }

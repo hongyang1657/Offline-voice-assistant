@@ -15,14 +15,21 @@ import android.os.IBinder;
 
 import java.io.IOException;
 
+import fitme.ai.zotyeautoassistant.bean.Status;
+import fitme.ai.zotyeautoassistant.bean.StatusWithUrl;
+import fitme.ai.zotyeautoassistant.presenter.MediaContinuePresenter;
+import fitme.ai.zotyeautoassistant.presenter.MediaNextPresenter;
+import fitme.ai.zotyeautoassistant.presenter.MediaPausePresenter;
+import fitme.ai.zotyeautoassistant.presenter.MediaReportPresenter;
 import fitme.ai.zotyeautoassistant.utils.L;
+import fitme.ai.zotyeautoassistant.view.impl.IMediaPlayerView;
 
 
 /**
  * Created by hongy on 2017/5/9.
  */
 
-public class MusicPlayerService extends Service {
+public class MusicPlayerService extends Service implements IMediaPlayerView {
 
     public static final int PLAT_MUSIC = 1;
     public static final int PAUSE_MUSIC = 2;
@@ -35,6 +42,11 @@ public class MusicPlayerService extends Service {
 
     public static final int PAUSE_MUSIC_BY_GESTURE = 9;    //手势暂停/播放音乐
     public static final int RESUME_MUSIC_BY_GESTURE = 10;
+
+    private MediaNextPresenter mediaNextPresenter;
+    private MediaPausePresenter mediaPausePresenter;
+    private MediaContinuePresenter mediaContinuePresenter;
+    private MediaReportPresenter mediaReportPresenter;
 
 
     //用于播放音乐等媒体资源
@@ -52,7 +64,10 @@ public class MusicPlayerService extends Service {
         super.onCreate();
         L.i("service-----------------------------onCreate");
         isCreatPlayer = true;
-
+        mediaNextPresenter = new MediaNextPresenter(this);
+        mediaPausePresenter = new MediaPausePresenter(this);
+        mediaReportPresenter = new MediaReportPresenter(this);
+        mediaContinuePresenter = new MediaContinuePresenter(this);
     }
 
     /**
@@ -69,8 +84,8 @@ public class MusicPlayerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         L.i("收到播放指令:"+intent.getIntExtra("type",-1));
-        String songUrl = intent.getStringExtra("songUrl");
-        int position = intent.getIntExtra("position",0);     //播放音乐的时候跳到position的位置
+        final String songUrl = intent.getStringExtra("songUrl");
+        final int position = intent.getIntExtra("position",0);     //播放音乐的时候跳到position的位置
         final String playerType = intent.getStringExtra("playerType");
         String playerSecond = intent.getStringExtra("playerSecond");
         switch (intent.getIntExtra("type",-1)){
@@ -88,11 +103,9 @@ public class MusicPlayerService extends Service {
                             if (isCreatPlayer){
                                 if (!"通知".equals(playerType)){
                                     L.i("当前歌曲播放完毕，下一首"+mp.isPlaying());
-                                    //发送广播
-                                    Intent intent = new Intent();
-                                    intent.putExtra("mediaPlayerState","next");
-                                    intent.setAction("fitme.ai.service.MusicPlayerService");
-                                    sendBroadcast(intent);
+                                    L.i("媒体播放器状态next");
+                                    mediaNext();
+                                    mediaReport(songUrl,position,"on");
                                 }
 
                             }
@@ -104,19 +117,15 @@ public class MusicPlayerService extends Service {
                         public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
                             L.i("onError------------音频无法播放");
                             //TODO 遇到不能播放的情况，请求下一曲
-
+                            mediaNext();
+                            mediaReport(songUrl,position,"on");
                             return false;
                         }
                     });
                 }
 
-                Intent intent1 = new Intent();
-                intent1.putExtra("mediaPlayerState","play");
-                intent1.putExtra("currentPosition",(double)position/(double) 100);
-                intent1.putExtra("currentUrl",songUrl);
-                intent1.setAction("fitme.ai.service.MusicPlayerService");
-                sendBroadcast(intent1);
                 playMusic(songUrl,position,isTTSing);
+                mediaReport(songUrl,position,"on");
                 break;
             case PAUSE_MUSIC:
                 L.i("暂停播放音乐！！！！！！！！！！！！！！！！！");
@@ -128,14 +137,7 @@ public class MusicPlayerService extends Service {
                         mediaPlayer = null;
                     }else {
                         mediaPlayer.pause();
-                        double positionPercent;
-                        positionPercent = (double) mediaPlayer.getCurrentPosition()/(double)mediaPlayer.getDuration();
-                        Intent intent2 = new Intent();
-                        intent2.putExtra("mediaPlayerState","pause");
-                        intent2.putExtra("currentPosition",positionPercent);
-                        intent2.putExtra("currentUrl",songUrl);
-                        intent2.setAction("fitme.ai.service.MusicPlayerService");
-                        sendBroadcast(intent2);
+
                     }
                 }
                 break;
@@ -146,12 +148,8 @@ public class MusicPlayerService extends Service {
                     mediaPlayer.start();
                     double positionPercent;
                     positionPercent = (double) mediaPlayer.getCurrentPosition()/(double)mediaPlayer.getDuration();
-                    Intent intent3=new Intent();
-                    intent3.putExtra("mediaPlayerState","resume");
-                    intent3.putExtra("currentPosition",positionPercent);
-                    intent3.putExtra("currentUrl",songUrl);
-                    intent3.setAction("fitme.ai.service.MusicPlayerService");
-                    sendBroadcast(intent3);
+                    mediaContinue();
+                    mediaReport(songUrl, (int) (positionPercent*100),"on");
                 }
                 break;
             case NEXT_MUSIC:
@@ -165,12 +163,7 @@ public class MusicPlayerService extends Service {
                     positionPercent = (double) mediaPlayer.getCurrentPosition()/(double)mediaPlayer.getDuration();
                     mediaPlayer.stop();
                     mediaPlayer = null;
-                    Intent intent4=new Intent();
-                    intent4.putExtra("mediaPlayerState","stop");
-                    intent4.putExtra("currentPosition",positionPercent);
-                    intent4.putExtra("currentUrl",songUrl);
-                    intent4.setAction("fitme.ai.service.MusicPlayerService");
-                    sendBroadcast(intent4);
+                    mediaReport(songUrl, (int) (positionPercent*100),"off");
                 }
                 break;
             case REDUCE_MUSIC_VOLUME:
@@ -299,4 +292,44 @@ public class MusicPlayerService extends Service {
         }
     }
 
+    //请求下一曲
+    private void mediaNext(){
+        mediaNextPresenter.mediaNext();
+    }
+
+    //上传暂停播放状态
+    private void mediaPause(int position){
+        mediaPausePresenter.mediaPause(position);
+    }
+
+    //继续播放
+    private void mediaContinue(){
+        mediaContinuePresenter.mediaContinue();
+    }
+
+    //上传播放器状态
+    private void mediaReport(String url,int position,String musicPlayerStatus){
+        mediaReportPresenter.mediaReport(url,position,musicPlayerStatus);
+    }
+
+    @Override
+    public void getMediaNext(StatusWithUrl statusWithUrl) {
+        String url = statusWithUrl.getUrl();
+        playMusic(url,0,false);
+    }
+
+    @Override
+    public void getMediaPause(Status responseBody) {
+
+    }
+
+    @Override
+    public void getMediaReport(Status responseBody) {
+
+    }
+
+    @Override
+    public void getMediaContinue(Status responseBody) {
+
+    }
 }

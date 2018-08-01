@@ -50,7 +50,7 @@
         <service android:name=".service.MusicPlayerService"/>
 
         <!--高德定位sdk     fec1e62c56aa001526bf7bffbb3ebe21      3fb52e137ed99a695333a9e9dd672090-->
-        <meta-data android:name="com.amap.api.v2.apikey" android:value="fec1e62c56aa001526bf7bffbb3ebe21">
+        <meta-data android:name="com.amap.api.v2.apikey" android:value="3fb52e137ed99a695333a9e9dd672090">
         </meta-data>
         <service android:name="com.amap.api.location.APSService"></service>
     </application>

@@ -57,6 +57,21 @@ public class AsrService extends Service implements IAppendAudio {
         }
     };
 
+    private int time = 0;
+    private Handler fvHandler = new Handler();
+    private Runnable fvTask = new Runnable() {
+        @Override
+        public void run() {
+            if (time<10){
+                fvHandler.postDelayed(this,1000);
+                time++;
+            }else {
+                //关闭floatingView
+                MyApplication.getInstance().getmFloatingView().hide();
+            }
+        }
+    };
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -138,6 +153,9 @@ public class AsrService extends Service implements IAppendAudio {
                 err = libisssr.start("all", 2, null);
                 //弹出悬浮窗
                 MyApplication.getInstance().getmFloatingView().show();
+                //悬浮窗计时归零
+                fvHandler.removeCallbacks(fvTask);
+                time = 0;
             }else {
                 //Log.i(TAG, "onReceive: 没有收到唤醒广播，不开启识别");
             }
@@ -225,6 +243,10 @@ public class AsrService extends Service implements IAppendAudio {
                     Log.i(TAG,"text:"+text);
                     Log.i(TAG,"normal_text:"+normal_text);
                     sendBroadcast(ASR_RESPONSE,normal_text);
+                    //TODO 重置FloatingView隐藏时间
+                    fvHandler.removeCallbacks(fvTask);
+                    fvHandler.post(fvTask);
+                    time = 0;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

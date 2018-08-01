@@ -23,7 +23,8 @@ public class TTSPlayer {
     private AudioTrack mAudioTrack = null;
     private int mAudioTrackMinBuffSize = 0;
     private int mAudioAppendSize = 0;
-    private int mStreamType = AudioManager.STREAM_NOTIFICATION;
+    //private int mStreamType = AudioManager.STREAM_NOTIFICATION;
+    private int mStreamType = AudioManager.STREAM_MUSIC;     //hy,换成媒体音乐流
 
     private ITTSPlayListener mTTSPlayListener = null;
 

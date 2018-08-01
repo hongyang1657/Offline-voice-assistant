@@ -17,6 +17,9 @@ import com.iflytek.speech.NativeHandle;
 import com.iflytek.speech.libisssr;
 import com.iflytek.speech.libisstts;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import fitme.ai.zotyeautoassistant.MyApplication;
 import fitme.ai.zotyeautoassistant.tts.ITTSPlayListener;
 import fitme.ai.zotyeautoassistant.tts.TTSPlayer;
@@ -41,7 +44,8 @@ import static fitme.ai.zotyeautoassistant.utils.Contansts.WAKE_UP_STATE;
 
 public class TtsService extends Service{
 
-
+    //speech列表
+    private List<String> speechList;
     private MBroadcastReceiver mBroadcastReceiver;
     private final NativeHandle mNativeHandle = new NativeHandle();
     TTSPlayer mPlayer = null;
@@ -98,6 +102,7 @@ public class TtsService extends Service{
     }
 
     private void initTTS(){
+        speechList = new LinkedList<>();
         //注册广播
         mBroadcastReceiver = new MBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -121,7 +126,12 @@ public class TtsService extends Service{
             public void playEnd() {
                 Log.i(TAG, "playEnd:播报完成 ");
                 //sendBroadcast(TTS_STATE,TTS_PLAY_END);
-                //MyApplication.getInstance().getmFloatingView().hide();
+                MyApplication.getInstance().getmFloatingView().hide();
+                //播放队列中的下一句
+                if (speechList.size()>0){
+                    libisstts.start(mNativeHandle, speechList.get(0));
+                    speechList.remove(0);
+                }
             }
         });
 
@@ -163,15 +173,20 @@ public class TtsService extends Service{
             switch (tts_control){
                 case TTS_START:
                     if (null!=tts_text){
+                        Log.i(TAG, "btnStartClicked: libisstts.start:"+tts_text);
                         if (getEngineState() == ENGINESTATE.TTS_ES_RUNNING){
                             //TODO 几种逻辑：1，新TTS打断旧TTS；2，顺序播放
-                            libisstts.stop(mNativeHandle);
+                            /*libisstts.stop(mNativeHandle);
                             setEngineState(ENGINESTATE.TTS_ES_FREE);
                             mPlayer.stop();
-                            Log.i(TAG, "onClick: 合成终止");
+                            Log.i(TAG, "onClick: 合成终止");*/
+
+                            //2.顺序播放,后来的speech加入队列
+                            speechList.add(tts_text);
+
+                        }else {
+                            libisstts.start(mNativeHandle, tts_text);
                         }
-                        Log.i(TAG, "btnStartClicked: libisstts.start:"+tts_text);
-                        libisstts.start(mNativeHandle, tts_text);
                     }
                     break;
                 case TTS_PAUSE:

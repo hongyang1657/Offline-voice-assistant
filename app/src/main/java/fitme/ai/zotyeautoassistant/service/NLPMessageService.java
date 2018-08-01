@@ -60,6 +60,7 @@ import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE_SPEECH_TIMEO
 import static fitme.ai.zotyeautoassistant.utils.Contansts.FITME_SERVICE_COMMUNICATION;
 import static fitme.ai.zotyeautoassistant.utils.Contansts.LOG;
 import static fitme.ai.zotyeautoassistant.utils.Contansts.LOGIN_STATE;
+import static fitme.ai.zotyeautoassistant.utils.Contansts.LOG_LOCAL;
 import static fitme.ai.zotyeautoassistant.utils.Contansts.TTS_CONTROL;
 import static fitme.ai.zotyeautoassistant.utils.Contansts.TTS_START;
 import static fitme.ai.zotyeautoassistant.utils.Contansts.TTS_TEXT;
@@ -106,7 +107,7 @@ public class NLPMessageService extends Service implements IMessageManageService{
         }
     };
 
-    private Intent intentMusic;
+    private Intent intentMusic = null;
     private String url = "";
     private String playerType;
     private String playerSecond;
@@ -140,6 +141,9 @@ public class NLPMessageService extends Service implements IMessageManageService{
         super.onDestroy();
         unregisterReceiver(mBroadcastReceiver);
         socketHandler.removeCallbacksAndMessages(null);
+        if (intentMusic!=null){
+            stopService(intentMusic);
+        }
         L.i("销毁NLPMessageService");
     }
 
@@ -247,15 +251,9 @@ public class NLPMessageService extends Service implements IMessageManageService{
                                 .disableHtmlEscaping()
                                 .create();
                         L.i("本地模型预测结果speech:"+ gson.toJson(resultBean));
-                        sendBroadcast(null,0,LOG,gson.toJson(resultBean));
+                        sendBroadcast(null,0,LOG_LOCAL,gson.toJson(resultBean));
 
-                        //隐藏floatingView
-                        try {
-                            sleep(5000);
-                            //MyApplication.getInstance().getmFloatingView().hide();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+
                     }
                 });
 
@@ -351,6 +349,7 @@ public class NLPMessageService extends Service implements IMessageManageService{
 
                     } else if ("暂停播放".equals(intent)){
                         //TODO 暂停播放
+                        playingmusic(MusicPlayerService.STOP_MUSIC,url,0);
                     } else if ("播放<speech><url><播放类别><循环秒数><缓存秒数><位置>".equals(intent)){     //播放
                         url = messageBody.getSlots().getUrl();
                         String slotSpeech = messageBody.getSlots().getSpeech();
