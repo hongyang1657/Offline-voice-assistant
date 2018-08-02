@@ -31,12 +31,14 @@ public class ActivateService extends Service implements IAppendAudio{
     int err = ISSErrors.ISS_SUCCESS;
     private NativeHandle h;
     private Context mContext;
+    private Intent intentMusic;
 
     @Override
     public void onCreate() {
         super.onCreate();
         initMVW();
         mContext = this;
+        intentMusic = new Intent(this,MusicPlayerService.class);
         L.i("创建----ActivateService");
         /*new Thread(){
             @Override
@@ -76,6 +78,8 @@ public class ActivateService extends Service implements IAppendAudio{
                 sendBroadcast(WAKE_UP_STATE,WAKE_UP);
                 sendBroadcast(TTS_CONTROL,TTS_STOP);   //停止播放正在执行的tts
                 SoundPlayUtils.getInstance(mContext).playSound(SoundPlayUtils.WAKE_UP_SOUND);
+                //TODO 降低音乐播放
+                playingmusic(MusicPlayerService.REDUCE_MUSIC_VOLUME);     //减小音乐音量
             }
             public void onMVWMsgProc_(long uMsg,long wParam, String lParam){
                 Log.i(TAG, "onMVWMsgProc_: "+lParam);
@@ -150,5 +154,9 @@ public class ActivateService extends Service implements IAppendAudio{
         return mLstResDir.size();
     }
 
-
+    private void playingmusic(int type) {
+        //启动服务，播放音乐
+        intentMusic.putExtra("type",type);
+        startService(intentMusic);
+    }
 }

@@ -48,7 +48,6 @@ import fitme.ai.zotyeautoassistant.utils.ResultDealUtils;
 import fitme.ai.zotyeautoassistant.utils.SPConstants;
 import fitme.ai.zotyeautoassistant.utils.SharedPreferencesUtils;
 import fitme.ai.zotyeautoassistant.utils.StringUtils;
-import fitme.ai.zotyeautoassistant.utils.UnicodeUtil;
 import fitme.ai.zotyeautoassistant.utils.VolumeUtil;
 import fitme.ai.zotyeautoassistant.view.impl.IMessageManageService;
 import io.netty.channel.Channel;
@@ -265,7 +264,7 @@ public class NLPMessageService extends Service implements IMessageManageService{
                                     .create();
                             L.i("本地模型预测结果speech:"+ gson.toJson(resultBean));
                             sendBroadcast(null,0,LOG_LOCAL,gson.toJson(resultBean));
-                            
+
                         }
                     });
                 }

@@ -71,6 +71,7 @@ public class AsrService extends Service implements IAppendAudio {
             }
         }
     };
+    private Intent intentMusic;
 
     @Override
     public void onCreate() {
@@ -82,7 +83,7 @@ public class AsrService extends Service implements IAppendAudio {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(FITME_SERVICE_COMMUNICATION);
         registerReceiver(mBroadcastReceiver,intentFilter);
-
+        intentMusic = new Intent(this,MusicPlayerService.class);
         /*new Thread(){
             @Override
             public void run() {
@@ -208,6 +209,7 @@ public class AsrService extends Service implements IAppendAudio {
                 Log.i(TAG, "handleSRMessage: 识别超时");
                 handler.removeCallbacks(task);
                 sendBroadcast(ASR_STATE,ASR_STATE_RESPONSE_TIMEOUT);
+                playingmusic(MusicPlayerService.RECOVER_MUSIC_VOLUME);     //恢复音乐音量
             }
             break;
             case libisssr.ISS_SR_MSG_SpeechStart: {
@@ -219,6 +221,7 @@ public class AsrService extends Service implements IAppendAudio {
             case libisssr.ISS_SR_MSG_SpeechTimeOut: {
                 Log.i(TAG, "handleSRMessage: 说话超时");
                 sendBroadcast(ASR_STATE,ASR_STATE_SPEECH_TIMEOUT);
+                playingmusic(MusicPlayerService.RECOVER_MUSIC_VOLUME);     //恢复音乐音量
             }
             break;
             case libisssr.ISS_SR_MSG_SpeechEnd: {
@@ -232,6 +235,7 @@ public class AsrService extends Service implements IAppendAudio {
                 Log.i(TAG, "handleSRMessage: 识别出错");
                 handler.removeCallbacks(task);
                 sendBroadcast(ASR_STATE,ASR_STATE_ERROR);
+                playingmusic(MusicPlayerService.RECOVER_MUSIC_VOLUME);     //恢复音乐音量
             }
             break;
             case libisssr.ISS_SR_MSG_Result: {
@@ -324,5 +328,11 @@ public class AsrService extends Service implements IAppendAudio {
         intent.setAction(FITME_SERVICE_COMMUNICATION);
         intent.putExtra(key1,value1);
         sendBroadcast(intent);
+    }
+
+    private void playingmusic(int type) {
+        //启动服务，播放音乐
+        intentMusic.putExtra("type",type);
+        startService(intentMusic);
     }
 }
