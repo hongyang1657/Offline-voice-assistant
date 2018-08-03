@@ -99,13 +99,14 @@ public class AsrService extends Service implements IAppendAudio {
         err = libisssr.stop();
         err = libisssr.destroy();
         unregisterReceiver(mBroadcastReceiver);
+        if (intentMusic!=null){
+            stopService(intentMusic);
+        }
         L.i("销毁AsrService");
     }
 
     //首次激活需要设置机器码，序列号。并且需要联网。从网络获取激活码，进行激活。激活成功后进行初始化
     private String mMechineCode = "test_speechsuite_machinecode";
-
-
     private void initAsr(){
         final String strPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/iflytek/res/sr/";
         new Thread(){
