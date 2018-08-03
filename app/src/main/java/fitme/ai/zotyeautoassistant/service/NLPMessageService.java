@@ -43,14 +43,10 @@ import fitme.ai.zotyeautoassistant.presenter.SmartSceneControlPresenter;
 import fitme.ai.zotyeautoassistant.utils.ChatItemTypeConsts;
 import fitme.ai.zotyeautoassistant.utils.DictionaryGetUtils;
 import fitme.ai.zotyeautoassistant.utils.L;
-import fitme.ai.zotyeautoassistant.utils.Mac;
 import fitme.ai.zotyeautoassistant.utils.ResultDealUtils;
-import fitme.ai.zotyeautoassistant.utils.SPConstants;
-import fitme.ai.zotyeautoassistant.utils.SharedPreferencesUtils;
 import fitme.ai.zotyeautoassistant.utils.StringUtils;
 import fitme.ai.zotyeautoassistant.utils.VolumeUtil;
 import fitme.ai.zotyeautoassistant.view.impl.IMessageManageService;
-import io.netty.channel.Channel;
 import okhttp3.ResponseBody;
 
 import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_RESPONSE;
@@ -241,7 +237,7 @@ public class NLPMessageService extends Service implements IMessageManageService{
                     public void run() {
                         super.run();
                         if (useSocket){
-                            initSocket();
+                            //initSocket();
                         }else {
                             handler.post(task);  //开启轮询
                         }
@@ -322,12 +318,14 @@ public class NLPMessageService extends Service implements IMessageManageService{
             MessageBody messageBody = message.getMessage_body();
             if (messageBody != null && messageBody.getIntent() != null && "release_turn".equals(messageBody.getIntent())) {
                 L.i("收到release_turn开启唤醒");
+                //TODO 收到release_turn开启唤醒
+
                 continue;
             }else {
                 //L.i("未收到release_turn不开启开启唤醒");
             }
             L.i("MyApplication.getInstance().getMsgId():"+ MyApplication.getInstance().getMsgId()+" -----message.getMessage_id():"+message.getMessage_id());
-            if (!MyApplication.getInstance().getMsgId().contains(message.getMessage_id())) {
+            if (!MyApplication.getInstance().getMsgId().contains(message.getMessage_id())) {   //不处理重复messageId的消息
                 MyApplication.getInstance().getMsgId().add(message.getMessage_id());
                 if (StringUtils.isEmpty(message.getFrom_message_id())) {
                     continue;
@@ -335,7 +333,14 @@ public class NLPMessageService extends Service implements IMessageManageService{
                 if (messageType.contains("speech")&&!ChatItemTypeConsts.SPEECH_TYPE_AUTO_U2A_SPEECH.equals(messageType)){
                     //需要TTS播报的内容,发送广播
                     String speech = messageBody.getSpeech();
-                    sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,speech);
+
+                    if (isMessageIdLegal(message.getMessage_id())){
+                        if (speech!=null&&!"".equals(speech)){
+                            L.i("播报的speech:"+speech);
+                            playingmusic(MusicPlayerService.PAUSE_MUSIC,url,0);   //暂停播放
+                            sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,speech);
+                        }
+                    }
 
                     continue;
                 }else {
@@ -409,6 +414,19 @@ public class NLPMessageService extends Service implements IMessageManageService{
         sendBroadcast(intent);
     }
 
+    //判断messageId是否过期
+    private boolean isMessageIdLegal(String messageId){
+        if (MyApplication.getInstance().getMessageId().contains(messageId)){      //返回的数据包含此message（表示用户对话得到回应）
+            if (messageId.equals(MyApplication.getInstance().getMessageId().get(0))){   //messageId在首位
+                return true;
+            }else {
+                return false;
+            }
+        }else {   //表示收到了任务或主动推送的消息
+            return true;
+        }
+    }
+
     @Override
     public void getMessageResp(MessageGet messageGet) {
         L.i("消息中心http:"+new Gson().toJson(messageGet));
@@ -455,7 +473,7 @@ public class NLPMessageService extends Service implements IMessageManageService{
     /**
      * socket 连接与消息接收
      */
-    private void initSocket(){
+    /*private void initSocket(){
         L.i("初始化socket");
         String userId = SharedPreferencesUtils.getInstance().getStringValueByKey(SPConstants.SP_AYAH_USERID);
         String token = SharedPreferencesUtils.getInstance().getStringValueByKey(SPConstants.SP_AYAH_USER_TOKEN);
@@ -489,7 +507,7 @@ public class NLPMessageService extends Service implements IMessageManageService{
         });
         L.i("SOCKET_NOTIFICATION_PORT:"+ ApiManager.SOCKET_NOTIFICATION_PORT+" ----SOCKET_NOTIFICATION_IP:"+ApiManager.SOCKET_NOTIFICATION_IP);
         connector.connect(ApiManager.SOCKET_NOTIFICATION_PORT,ApiManager.SOCKET_NOTIFICATION_IP);
-    }
+    }*/
 
     private void playingmusic(int type,String songUrl,int position) {
         //启动服务，播放音乐

@@ -84,21 +84,6 @@ public class AsrService extends Service implements IAppendAudio {
         intentFilter.addAction(FITME_SERVICE_COMMUNICATION);
         registerReceiver(mBroadcastReceiver,intentFilter);
         intentMusic = new Intent(this,MusicPlayerService.class);
-        /*new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                while (true){
-                    try {
-                        sleep(5000);
-                        L.i("AsrService-------------running");
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-        }.start();*/
     }
 
 
@@ -119,9 +104,10 @@ public class AsrService extends Service implements IAppendAudio {
 
     //首次激活需要设置机器码，序列号。并且需要联网。从网络获取激活码，进行激活。激活成功后进行初始化
     private String mMechineCode = "test_speechsuite_machinecode";
-    String strPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/iflytek/res/sr/";
+
 
     private void initAsr(){
+        final String strPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/iflytek/res/sr/";
         new Thread(){
             @Override
             public void run() {

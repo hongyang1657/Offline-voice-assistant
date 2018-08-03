@@ -78,20 +78,6 @@ public class TtsService extends Service{
         initTTS();
         intentMusic = new Intent(this,MusicPlayerService.class);
         L.i("创建TtsService");
-        /*new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                while (true){
-                    try {
-                        sleep(5000);
-                        L.i("TtsService-------------running");
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }.start();*/
     }
 
     @Override
@@ -173,6 +159,11 @@ public class TtsService extends Service{
             String tts_text = intent.getStringExtra(TTS_TEXT);
             int tts_control = intent.getIntExtra(TTS_CONTROL,TTS_START);
             int wakeUp = intent.getIntExtra(WAKE_UP_STATE,AWAIT_WAKE_UP);
+
+            if (wakeUp==WAKE_UP){
+                L.i("唤醒了！！！！清空待播放tts列表");
+                speechList.clear();
+            }
 
             switch (tts_control){
                 case TTS_START:

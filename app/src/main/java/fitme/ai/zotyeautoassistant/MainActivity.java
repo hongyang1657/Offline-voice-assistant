@@ -148,7 +148,7 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         initView();
         initPresenter();
         initActivateService();
-        initAsrService();
+        //initAsrService();
         initTtsService();
         initMessageService();
 
@@ -230,6 +230,7 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         if (intentMessageService!=null){
             stopService(intentMessageService);
         }
+        unregisterReceiver(mBroadcastReceiver);
     }
 
     private class MBroadcastReceiver extends BroadcastReceiver{
