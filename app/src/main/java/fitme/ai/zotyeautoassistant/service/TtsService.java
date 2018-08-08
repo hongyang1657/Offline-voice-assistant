@@ -1,11 +1,15 @@
 package fitme.ai.zotyeautoassistant.service;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.net.TrafficStats;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
@@ -122,6 +126,24 @@ public class TtsService extends Service{
                     libisstts.start(mNativeHandle, speechList.get(0));
                     speechList.remove(0);
                 }
+
+                //测试流量使用
+                try {
+                    PackageManager packageManager = getApplicationContext().getPackageManager();
+                    String packageName = getApplicationContext().getPackageName();
+                    L.i("应用包名"+"onWakeup: "+packageName);
+                    @SuppressLint("WrongConstant") ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_ACTIVITIES);
+                    int uid = applicationInfo.uid;
+                    L.i("开始拾音前流量统计 uid:" + uid);
+                    long uidRxBytes = TrafficStats.getUidRxBytes(uid);
+                    L.i("uidRxBytes2222222:"+uidRxBytes);
+                    long uidTxBytes = TrafficStats.getUidTxBytes(uid);
+                    L.i("uidTxBytes2222222:"+uidTxBytes);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                    L.i("开始拾音前的流量统计 uid:" + e);
+                }
+
             }
         });
 

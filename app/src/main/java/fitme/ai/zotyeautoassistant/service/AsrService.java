@@ -42,8 +42,8 @@ public class AsrService extends Service implements IAppendAudio {
     private MBroadcastReceiver mBroadcastReceiver;
     private int currentVolume = 0;
     private boolean waveReturnZero = true;
-    private Handler handler = new Handler();
-    private Runnable task = new Runnable() {
+    private Handler handlerVolume = new Handler();
+    private Runnable taskVolume = new Runnable() {
         @Override
         public void run() {
             if (waveReturnZero){
@@ -53,7 +53,7 @@ public class AsrService extends Service implements IAppendAudio {
                 sendBroadcast(ASR_VOLUME,0);
                 waveReturnZero = true;
             }
-            handler.postDelayed(this,200);
+            handlerVolume.postDelayed(this,200);
         }
     };
 
@@ -194,14 +194,14 @@ public class AsrService extends Service implements IAppendAudio {
             break;
             case libisssr.ISS_SR_MSG_ResponseTimeout: {
                 Log.i(TAG, "handleSRMessage: 识别超时");
-                handler.removeCallbacks(task);
+                handlerVolume.removeCallbacks(taskVolume);
                 sendBroadcast(ASR_STATE,ASR_STATE_RESPONSE_TIMEOUT);
                 playingmusic(MusicPlayerService.RECOVER_MUSIC_VOLUME);     //恢复音乐音量
             }
             break;
             case libisssr.ISS_SR_MSG_SpeechStart: {
                 Log.i(TAG, "handleSRMessage: 检测到语音开始");
-                handler.post(task);
+                handlerVolume.post(taskVolume);
                 sendBroadcast(ASR_STATE,ASR_STATE_SPEECH_START);
             }
             break;
@@ -213,14 +213,14 @@ public class AsrService extends Service implements IAppendAudio {
             break;
             case libisssr.ISS_SR_MSG_SpeechEnd: {
                 Log.i(TAG, "handleSRMessage: 检测到语音结束");
-                handler.removeCallbacks(task);
+                handlerVolume.removeCallbacks(taskVolume);
                 stopRecord();
                 sendBroadcast(ASR_STATE,ASR_STATE_SPEECH_END);
             }
             break;
             case libisssr.ISS_SR_MSG_Error: {
                 Log.i(TAG, "handleSRMessage: 识别出错");
-                handler.removeCallbacks(task);
+                handlerVolume.removeCallbacks(taskVolume);
                 sendBroadcast(ASR_STATE,ASR_STATE_ERROR);
                 playingmusic(MusicPlayerService.RECOVER_MUSIC_VOLUME);     //恢复音乐音量
             }

@@ -148,7 +148,7 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         initView();
         initPresenter();
         initActivateService();
-        initAsrService();
+        //initAsrService();
         initTtsService();
         initMessageService();
 

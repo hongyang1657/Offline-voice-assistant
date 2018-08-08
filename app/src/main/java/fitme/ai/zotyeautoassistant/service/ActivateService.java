@@ -1,8 +1,12 @@
 package fitme.ai.zotyeautoassistant.service;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.net.TrafficStats;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
@@ -66,6 +70,24 @@ public class ActivateService extends Service implements IAppendAudio{
                 SoundPlayUtils.getInstance(mContext).playSound(SoundPlayUtils.WAKE_UP_SOUND);
                 //降低音乐播放
                 playingmusic(MusicPlayerService.REDUCE_MUSIC_VOLUME);
+
+                //测试流量使用
+                try {
+                    PackageManager packageManager = getApplicationContext().getPackageManager();
+                    String packageName = getApplicationContext().getPackageName();
+                    L.i("应用包名"+"onWakeup: "+packageName);
+                    @SuppressLint("WrongConstant") ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_ACTIVITIES);
+                    int uid = applicationInfo.uid;
+                    L.i("开始拾音前流量统计 uid:" + uid);
+                    long uidRxBytes = TrafficStats.getUidRxBytes(uid);
+                    L.i("uidRxBytes1111111:"+uidRxBytes);
+                    long uidTxBytes = TrafficStats.getUidTxBytes(uid);
+                    L.i("uidTxBytes1111111:"+uidTxBytes);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                    L.i("开始拾音前的流量统计 uid:" + e);
+                }
+
             }
             public void onMVWMsgProc_(long uMsg,long wParam, String lParam){
                 Log.i(TAG, "onMVWMsgProc_: "+lParam);
@@ -98,6 +120,8 @@ public class ActivateService extends Service implements IAppendAudio{
         intent.putExtra(key,value);
         sendBroadcast(intent);
     }
+
+    //service
 
 
     @Override
