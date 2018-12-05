@@ -41,10 +41,12 @@ import fitme.ai.zotyeautoassistant.service.AsrService;
 import fitme.ai.zotyeautoassistant.service.ActivateService;
 import fitme.ai.zotyeautoassistant.service.NLPMessageService;
 import fitme.ai.zotyeautoassistant.service.TtsService;
+import fitme.ai.zotyeautoassistant.utils.FlightControlContants;
 import fitme.ai.zotyeautoassistant.utils.L;
 import fitme.ai.zotyeautoassistant.utils.Mac;
 import fitme.ai.zotyeautoassistant.utils.SPConstants;
 import fitme.ai.zotyeautoassistant.utils.SharedPreferencesUtils;
+import fitme.ai.zotyeautoassistant.utils.UDPSocket;
 import fitme.ai.zotyeautoassistant.view.impl.ILoginFragmentView;
 import okhttp3.ResponseBody;
 
@@ -272,6 +274,10 @@ public class MainActivity extends Activity implements ILoginFragmentView{
             if (null!=asrResponse&&!asrResponse.equals("")){
                 tvLog.append("\nASR:"+asrResponse+"\n");
                 tvLogLocal.append("\nASR:"+asrResponse+"\n");
+                if (asrResponse.equals("一键起飞")){
+                    L.i("发送udp");
+                    UDPSocket.getInstance().sendUdpAndWaitRes(FlightControlContants.TAKE_OFF);
+                }
             }
         }
     }

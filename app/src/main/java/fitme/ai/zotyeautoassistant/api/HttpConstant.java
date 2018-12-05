@@ -65,7 +65,7 @@ public class HttpConstant {
     //     环境信息上传
     public static final String METHOD_SD_ENVIRONMENT_STATE_UPLOAD = "environment/state/upload";
 
-    public static final String INSTANCE_NAME = "zhongtai";
-    public static final String DOMAIN_NAME = "instances.fitme.ai";
+    public static final String INSTANCE_NAME = "production";
+    public static final String DOMAIN_NAME = "app.fitme.ai";
     public static final String DOMAIN_PORT = "9999";
 }
