@@ -3,13 +3,13 @@ package fitme.ai.zotyeautoassistant.utils;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.gson.Gson;
 
 import org.tensorflow.contrib.android.TensorFlowInferenceInterface;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,7 +33,7 @@ public class ResultDealUtils {
      * @param index
      * @return
      */
-    public static String IntentDeal(Context context, String index,DictionaryBean dictionaryBean) {
+    public static String IntentDeal(Context context, String index, DictionaryBean dictionaryBean) {
         //获取词典
         Map<String, Map<String, ?>> dictionary = dictionaryBean.getDictionary();
         Map<String, ?> intent2indexMap = dictionary.get("intent2indexMap");
@@ -139,17 +139,17 @@ public class ResultDealUtils {
     /**
      * 模型预测的方法
      *
-     * @param ct                         上下文context
-     * @param requestString              用户请求的speech
-     * @param type                       请求的消息类型
-     * @param message_id                 用户创建的message_id,返回的时候为from_message_id
-     * @param context_Pe                 上下文向量，在程序加载时候做一次初始化
-     * @param query_Pe                   请求体的向量，在程序加载的时候做一次初始化
-     * @param tensorflowInterfaceIntent   intent预测的tensorflow对象
-     * @param tensorflowInterfaceSlot     slot预测的tensorflow对象
+     * @param ct                        上下文context
+     * @param requestString             用户请求的speech
+     * @param type                      请求的消息类型
+     * @param message_id                用户创建的message_id,返回的时候为from_message_id
+     * @param context_Pe                上下文向量，在程序加载时候做一次初始化
+     * @param query_Pe                  请求体的向量，在程序加载的时候做一次初始化
+     * @param tensorflowInterfaceIntent intent预测的tensorflow对象
+     * @param tensorflowInterfaceSlot   slot预测的tensorflow对象
      * @return
      */
-    public static ResultBean modelForecast(Context ct, String requestString, String type, String message_id, float[] context_Pe, float[] query_Pe, TensorFlowInferenceInterface tensorflowInterfaceIntent, TensorFlowInferenceInterface tensorflowInterfaceSlot,DictionaryBean dictionaryBean) {
+    public static ResultBean modelForecast(Context ct, String requestString, String type, String message_id, float[] context_Pe, float[] query_Pe, TensorFlowInferenceInterface tensorflowInterfaceIntent, TensorFlowInferenceInterface tensorflowInterfaceSlot, DictionaryBean dictionaryBean) {
         //定义返回的数据
         ResultBean resultBean = new ResultBean();
         List<String> slot = new ArrayList<>();
@@ -160,7 +160,7 @@ public class ResultDealUtils {
         List<List<String>> chars = ModelSwitchFactory.event2string(eventses);
         Log.i("aaa", chars.toString() + "长度：" + chars.size());
         //构建intent预测所需参数
-        List<List<Integer>> intent2VectorResult = ModelSwitchFactory.Intent2Vector(ct, chars,dictionaryBean);
+        List<List<Integer>> intent2VectorResult = ModelSwitchFactory.Intent2Vector(ct, chars, dictionaryBean);
         List<Integer> x_context = intent2VectorResult.get(0);
         List<Integer> x_query = intent2VectorResult.get(1);
         Log.i("aaa", x_context.toString() + "长度：" + x_context.size());
@@ -175,36 +175,45 @@ public class ResultDealUtils {
         for (int i = 0; i < x_query.size(); i++) {
             query[i] = x_query.get(i);
         }
+        //获取聊天分数预测的数组长度
+        int intent_score_size = dictionaryBean.getDictionary().get("intent2indexMap").size();
         //定义输出结果
         long[] predict_intent = new long[1];
+        float[] intent_score = new float[intent_score_size];
         Log.i("aaa", "---------------------------------------------------开始调用intent.pb模型-----------------------------------------------");
         //调用intent模型
         tensorflowInterfaceIntent.feed("model_intent/context", context, new long[]{1, 200});
         tensorflowInterfaceIntent.feed("model_intent/query", query, new long[]{1, 30});
         tensorflowInterfaceIntent.feed("model_intent/context_pe", context_Pe, new long[]{200, 300});
         tensorflowInterfaceIntent.feed("model_intent/query_pe", query_Pe, new long[]{30, 300});
-        tensorflowInterfaceIntent.run(new String[]{"model_intent/predict_intent"});
+//        tensorflowInterfaceIntent.run(new String[]{"model_intent/predict_intent"});
+        tensorflowInterfaceIntent.run(new String[]{"model_intent/predict_intent","model_intent/intent_score"});
         tensorflowInterfaceIntent.fetch("model_intent/predict_intent", predict_intent);
+        tensorflowInterfaceIntent.fetch("model_intent/intent_score", intent_score);
         Log.i("aaa", "---------------------------------------------------intent.pb模型预测结束-----------------------------------------------");
         for (long f1 : predict_intent) {
             Log.i("aaa", "intent预测结果：" + f1);
         }
 
+        for (float f2 : intent_score) {
+            Log.i("aaa","intent预测到的聊天分数：" + f2);
+        }
+
         //处理intent结果，得到Solt的请求的参数
         String intentIndex = String.valueOf(predict_intent[0]);
-        String intentDeal = ResultDealUtils.IntentDeal(ct, intentIndex,dictionaryBean);
+        String intentDeal = ResultDealUtils.IntentDeal(ct, intentIndex, dictionaryBean);
         Log.i("aaa", "得到的intent：" + intentDeal);
         if (!"未查到对应的intent".equals(intentDeal)) {
             String[] split = intentDeal.replaceAll("\\<", "-").replaceAll("\\>", "-").split("-");
-            Log.i("aaa","split:" + Arrays.toString(split));
+            Log.i("aaa", "split:" + Arrays.toString(split));
             if (split.length > 1) {
                 for (int i = 0; i < split.length; i++) {
                     if (i > 0 && i < split.length) {
-                        if ("".equals(split[i])){
+                        if ("".equals(split[i])) {
                             continue;//去除数组中的空串
                         }
                         //构建solt预测所需参数
-                        SlotReturnBean slotReturnBean = ModelSwitchFactory.Slot2Vector(ct, chars, intentDeal, split[i],dictionaryBean);
+                        SlotReturnBean slotReturnBean = ModelSwitchFactory.Slot2Vector(ct, chars, intentDeal, split[i], dictionaryBean);
                         List<Integer> x_passage = slotReturnBean.getX_passage();
                         List<Integer> x_intent = slotReturnBean.getX_intent();
                         List<Integer> x_slot_name = slotReturnBean.getX_slot_name();
@@ -258,6 +267,7 @@ public class ResultDealUtils {
                 resultBean.setFrom_message_id(message_id);
                 resultBean.setIntent(intentDeal);
                 resultBean.setSlot(slot);
+                resultBean.setIntent_score(intent_score[(int) predict_intent[0]]);//intent预测分数
                 return resultBean;
             } else {
                 //没有slot
@@ -266,6 +276,7 @@ public class ResultDealUtils {
                 resultBean.setFrom_message_id(message_id);
                 resultBean.setIntent(intentDeal);
                 resultBean.setSlot(slot);
+                resultBean.setIntent_score(intent_score[(int) predict_intent[0]]);//intent预测分数
                 return resultBean;
             }
         } else {
@@ -274,6 +285,7 @@ public class ResultDealUtils {
             resultBean.setFrom_message_id(message_id);
             resultBean.setIntent(intentDeal);
             resultBean.setSlot(slot);
+            resultBean.setIntent_score(intent_score[(int) predict_intent[0]]);//intent预测分数
             return resultBean;
         }
     }

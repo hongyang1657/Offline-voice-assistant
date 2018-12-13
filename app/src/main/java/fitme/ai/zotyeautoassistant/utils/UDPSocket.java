@@ -12,15 +12,19 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
+
+import fitme.ai.zotyeautoassistant.view.impl.UdpReceiveListener;
 
 /**
  * 飞控操作命令组播
  */
 public class UDPSocket {
 
-    private static final int DEFAULT_PORT = 18002;//端口号
+    private static final int DEFAULT_PORT = 57816;//端口号57816  18001
     private static final int MAX_DATA_PACKET_LENGTH = 32;
-    private static final String HOST = "226.0.0.22";
+    //private static final String HOST = "226.0.0.22";
+    private static final String HOST = "255.255.255.255";
 
     private RecThread recThread = null;
     private SendThread sendThread = null;
@@ -46,13 +50,12 @@ public class UDPSocket {
             try {
                 mSocket = new DatagramSocket(null);
                 mSocket.setReuseAddress(true);
-                mSocket.bind(new InetSocketAddress(InetAddress.getByName(HOST),DEFAULT_PORT));
+                //mSocket.bind(new InetSocketAddress(InetAddress.getByName(HOST),DEFAULT_PORT));
+                mSocket.bind(new InetSocketAddress(DEFAULT_PORT));
                 //开启接收线程
                 recThread = new RecThread();
                 recThread.start();
             } catch (SocketException e) {
-                e.printStackTrace();
-            } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
         }
@@ -104,7 +107,7 @@ public class UDPSocket {
                 InetAddress address = InetAddress.getByName(HOST);
                 final DatagramPacket packet = new DatagramPacket(datas, datas.length, address, DEFAULT_PORT);
                 mSocket.send(packet);
-                Log.i("ayah_home", "run: "+datas);
+                Log.i("debug_message", "run: "+ Arrays.toString(datas));
 
             } catch (UnknownHostException e) {
                 e.printStackTrace();
@@ -129,9 +132,10 @@ public class UDPSocket {
                 mSocket.receive(packet);
                 String receiveMsg = new String(packet.getData()).trim();
                 Log.i("ayah_home", "run: "+receiveMsg);
-//                if (listener!=null){
-//                    listener.onReceiver(receiveMsg);
-//                }
+                if (listener!=null){
+                    listener.onReceiver(receiveMsg);
+                    listener.onReceiver(packet.getData());
+                }
                 mHandler.sendEmptyMessage(2);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -139,8 +143,8 @@ public class UDPSocket {
         }
     }
 
-//    private UdpReceiveListener listener;
-//    public void setOnUdpReceiveListener(UdpReceiveListener listener){
-//        this.listener = listener;
-//    }
+    private UdpReceiveListener listener;
+    public void setOnUdpReceiveListener(UdpReceiveListener listener){
+        this.listener = listener;
+    }
 }

@@ -1,12 +1,8 @@
 package fitme.ai.zotyeautoassistant.service;
 
-import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.net.TrafficStats;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
@@ -19,18 +15,18 @@ import com.iflytek.speech.mvw.IMVWListener;
 import java.io.File;
 import java.util.ArrayList;
 
-import fitme.ai.zotyeautoassistant.MyApplication;
 import fitme.ai.zotyeautoassistant.utils.IAppendAudio;
 import fitme.ai.zotyeautoassistant.utils.L;
 import fitme.ai.zotyeautoassistant.utils.SSRecorder;
 import fitme.ai.zotyeautoassistant.utils.SoundPlayUtils;
+import fitme.ai.zotyeautoassistant.utils.TimerUtil;
 
-import static fitme.ai.zotyeautoassistant.utils.Contansts.FITME_SERVICE_COMMUNICATION;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.TAG;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.TTS_CONTROL;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.TTS_STOP;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.WAKE_UP;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.WAKE_UP_STATE;
+import static fitme.ai.zotyeautoassistant.utils.Constants.FITME_SERVICE_COMMUNICATION;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TAG;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_CONTROL;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_STOP;
+import static fitme.ai.zotyeautoassistant.utils.Constants.WAKE_UP;
+import static fitme.ai.zotyeautoassistant.utils.Constants.WAKE_UP_STATE;
 
 public class ActivateService extends Service implements IAppendAudio{
     int err = ISSErrors.ISS_SUCCESS;
@@ -65,28 +61,12 @@ public class ActivateService extends Service implements IAppendAudio{
             @Override
             public void onMVWWakeup(int nMvwScene, int nMvwId, int nMvwScore, String lParam) {
                 Log.i(TAG, "onMVWWakeup: "+lParam);
+                TimerUtil.getInstance().start();    //使用语音唤醒 开始进入倒计时
                 sendBroadcast(WAKE_UP_STATE,WAKE_UP);
                 sendBroadcast(TTS_CONTROL,TTS_STOP);   //停止播放正在执行的tts
                 SoundPlayUtils.getInstance(mContext).playSound(SoundPlayUtils.WAKE_UP_SOUND);
                 //降低音乐播放
                 playingmusic(MusicPlayerService.REDUCE_MUSIC_VOLUME);
-
-                //测试流量使用
-                try {
-                    PackageManager packageManager = getApplicationContext().getPackageManager();
-                    String packageName = getApplicationContext().getPackageName();
-                    L.i("应用包名"+"onWakeup: "+packageName);
-                    @SuppressLint("WrongConstant") ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_ACTIVITIES);
-                    int uid = applicationInfo.uid;
-                    L.i("开始拾音前流量统计 uid:" + uid);
-                    long uidRxBytes = TrafficStats.getUidRxBytes(uid);
-                    L.i("uidRxBytes1111111:"+uidRxBytes);
-                    long uidTxBytes = TrafficStats.getUidTxBytes(uid);
-                    L.i("uidTxBytes1111111:"+uidTxBytes);
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                    L.i("开始拾音前的流量统计 uid:" + e);
-                }
 
             }
             public void onMVWMsgProc_(long uMsg,long wParam, String lParam){
@@ -97,15 +77,15 @@ public class ActivateService extends Service implements IAppendAudio{
         String keyWord = "{\"Keywords\": [{\"KeyWordId\": 0,\"KeyWord\": \"你好爱芽\"},{\"KeyWordId\": 1,\"KeyWord\": \"你好语音助理\"}]}";
         h = new NativeHandle();
         err = libissmvw.create(h, strPath, lis);
-        //Log.i(TAG, "init:create "+err);
+        Log.i(TAG, "init:create "+err);
         err = libissmvw.setMvwKeyWords(h, 1, keyWord);
-        //Log.i(TAG, "init:setMvwKeyWords "+err);
+        Log.i(TAG, "init:setMvwKeyWords "+err);
         err = libissmvw.start(h, 1);
-        //Log.i(TAG, "init:start "+err);
+        Log.i(TAG, "init:start "+err);
         String Path = Environment.getExternalStorageDirectory().getAbsolutePath()
                 + "/iflytek/res/mvw/";
-        //int n =initResDir(Path);
-        //Log.i(TAG, "init: "+"找到" + n + " 个资源路径");
+        int n =initResDir(Path);
+        Log.i(TAG, "init: "+"找到" + n + " 个资源路径");
         //注册录音
         SSRecorder.instance().registRecordType(SSRecorder.RECORDTYPE.RECORD_MVW, this);
 

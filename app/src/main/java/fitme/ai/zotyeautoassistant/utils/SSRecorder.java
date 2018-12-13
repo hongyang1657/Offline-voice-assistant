@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static fitme.ai.zotyeautoassistant.utils.Contansts.TAG;
-
 
 /**
  * Created by PeiXie on 2016/12/27.

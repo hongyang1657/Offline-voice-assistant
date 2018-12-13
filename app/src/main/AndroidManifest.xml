@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="fitme.ai.zotyeautoassistant">
 
+    <!--开机程序自启-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -38,14 +41,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".TestActivity">
+
+        </activity>
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".MainActivity">
-
         </activity>
 
         <service android:name=".service.ActivateService"/>
@@ -53,6 +56,12 @@
         <service android:name=".service.TtsService"/>
         <service android:name=".service.NLPMessageService"/>
         <service android:name=".service.MusicPlayerService"/>
+
+        <receiver android:name=".receiver.BootBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
 
         <!--高德定位sdk     fec1e62c56aa001526bf7bffbb3ebe21      3fb52e137ed99a695333a9e9dd672090-->
         <meta-data android:name="com.amap.api.v2.apikey" android:value="3fb52e137ed99a695333a9e9dd672090">

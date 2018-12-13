@@ -15,11 +15,10 @@ import android.widget.TextView;
 
 import fitme.ai.zotyeautoassistant.FloatingManager;
 import fitme.ai.zotyeautoassistant.R;
-import fitme.ai.zotyeautoassistant.utils.L;
 
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_RESPONSE;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_VOLUME;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.FITME_SERVICE_COMMUNICATION;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_RESPONSE;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_VOLUME;
+import static fitme.ai.zotyeautoassistant.utils.Constants.FITME_SERVICE_COMMUNICATION;
 
 public class FloatingView extends FrameLayout{
     private Context mContext;

@@ -16,12 +16,9 @@ import com.google.gson.GsonBuilder;
 import com.iflytek.speech.ISSErrors;
 import com.iflytek.speech.libisssr;
 import com.iflytek.speech.sr.ISRListener;
-
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.tensorflow.contrib.android.TensorFlowInferenceInterface;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -29,12 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import ai.fitme.notification.client.DefaultClientConnector;
-import ai.fitme.notification.client.service.MsgHandleService;
-import ai.fitme.notification.common.message.ConnectMessage;
 import fitme.ai.zotyeautoassistant.MyApplication;
-import fitme.ai.zotyeautoassistant.api.ApiManager;
 import fitme.ai.zotyeautoassistant.bean.DeviceConfigBean;
 import fitme.ai.zotyeautoassistant.bean.DictionaryBean;
 import fitme.ai.zotyeautoassistant.bean.MessageBody;
@@ -58,27 +50,27 @@ import fitme.ai.zotyeautoassistant.utils.VolumeUtil;
 import fitme.ai.zotyeautoassistant.view.impl.IMessageManageService;
 import okhttp3.ResponseBody;
 
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_RESPONSE;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE_DEFAULT;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE_ERROR;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE_RESPONSE_TIMEOUT;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE_SPEECH_END;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE_SPEECH_START;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE_SPEECH_TIMEOUT;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_VOLUME;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.AWAIT_WAKE_UP;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.FITME_SERVICE_COMMUNICATION;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.LOG;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.LOGIN_STATE;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.LOG_LOCAL;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.TAG;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.TTS_CONTROL;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.TTS_START;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.TTS_TEXT;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.WAKE_UP;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.WAKE_UP_STATE;
-import static java.lang.Thread.sleep;
+import static com.iflytek.speech.libisssr.ISS_SR_MODE_LOCAL_REC;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_RESPONSE;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_DEFAULT;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_ERROR;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_RESPONSE_TIMEOUT;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_SPEECH_END;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_SPEECH_START;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_SPEECH_TIMEOUT;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_VOLUME;
+import static fitme.ai.zotyeautoassistant.utils.Constants.AWAIT_WAKE_UP;
+import static fitme.ai.zotyeautoassistant.utils.Constants.FITME_SERVICE_COMMUNICATION;
+import static fitme.ai.zotyeautoassistant.utils.Constants.LOG;
+import static fitme.ai.zotyeautoassistant.utils.Constants.LOGIN_STATE;
+import static fitme.ai.zotyeautoassistant.utils.Constants.LOG_LOCAL;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TAG;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_CONTROL;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_START;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_TEXT;
+import static fitme.ai.zotyeautoassistant.utils.Constants.WAKE_UP;
+import static fitme.ai.zotyeautoassistant.utils.Constants.WAKE_UP_STATE;
 
 public class NLPMessageService extends Service implements IMessageManageService,IAppendAudio {
 
@@ -178,7 +170,13 @@ public class NLPMessageService extends Service implements IMessageManageService,
     @Override
     public void onCreate() {
         super.onCreate();
-        initPresenter();
+        //initPresenter();
+        //注册广播
+        mBroadcastReceiver = new MBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(FITME_SERVICE_COMMUNICATION);
+        registerReceiver(mBroadcastReceiver,intentFilter);
+        executorService = Executors.newCachedThreadPool(); //线程池
         executorService.submit(new Runnable() {
             @Override
             public void run() {
@@ -212,15 +210,15 @@ public class NLPMessageService extends Service implements IMessageManageService,
                 super.run();
                 err = libisssr.destroy();
                 err = libisssr.setMachineCode(mMechineCode);
-                Log.i(TAG, "err1111: "+err);
+                //Log.i(TAG, "err1111: "+err);
                 err = libisssr.activate(strPath);
-                Log.i(TAG, "ActivateAsr:libisssr.activate: "+err);
+                //Log.i(TAG, "ActivateAsr:libisssr.activate: "+err);
                 err = libisssr.createEx(0, strPath, mSRListener);
-                Log.i(TAG, "err3333: "+err);
+                //Log.i(TAG, "err3333: "+err);
                 err = libisssr.setParam(libisssr.ISS_SR_PARAM_TRACE_LEVEL,"2");
-                Log.i(TAG, "err2222: "+err);
+                //Log.i(TAG, "err2222: "+err);
                 err = libisssr.setParam(libisssr.ISS_SR_PARAM_RESPONSE_TIMEOUT, "20000");
-                Log.i(TAG, "err4444: "+err);
+                //Log.i(TAG, "err4444: "+err);
             }
         }.start();
 
@@ -257,16 +255,8 @@ public class NLPMessageService extends Service implements IMessageManageService,
         messageCreatPresenter = new MessageCreatPresenter(this);
         smartSceneControlPresenter = new SmartSceneControlPresenter(this);
         getDeviceConfigPresenter = new GetDeviceConfigPresenter(this);
-
         socketHandler = new SocketHandler(this);
-        //注册广播
-        mBroadcastReceiver = new MBroadcastReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(FITME_SERVICE_COMMUNICATION);
-        registerReceiver(mBroadcastReceiver,intentFilter);
-
         intentMusic = new Intent(this,MusicPlayerService.class);
-        executorService = Executors.newCachedThreadPool(); //线程池
     }
 
     //socket推送消息处理
@@ -311,7 +301,7 @@ public class NLPMessageService extends Service implements IMessageManageService,
             if (wakeUp==WAKE_UP){
                 //开始识别
                 startRecord();
-                err = libisssr.start("all", 2, null);
+                err = libisssr.start("all", ISS_SR_MODE_LOCAL_REC, null);
                 //弹出悬浮窗
                 MyApplication.getInstance().getmFloatingView().show();
                 //悬浮窗计时归零
@@ -322,34 +312,41 @@ public class NLPMessageService extends Service implements IMessageManageService,
             }
 
             if (loginSuccess){    //登录成功，开启socket或轮询取消息
-                new Thread(){
-                    @Override
-                    public void run() {
-                        super.run();
-                        if (useSocket){
-                            //initSocket();
-                        }else {
-                            handler.post(task);  //开启轮询
-                        }
-                    }
-                }.start();
+//                new Thread(){
+//                    @Override
+//                    public void run() {
+//                        super.run();
+//                        if (useSocket){
+//                            //initSocket();
+//                        }else {
+//                            handler.post(task);  //开启轮询
+//                        }
+//                    }
+//                }.start();
             }
             if (null!=asrResponse&&!asrResponse.equals("")){
                 if (MyApplication.getInstance().getSceneSpeechs().contains(asrResponse)){
                     L.i("测试speechs：语句中包含了拦截词"+asrResponse);
                     smartSceneControlPresenter.sceneActivate(asrResponse,context);
                 }else {
-                    messageCreatPresenter.messageCreat(asrResponse,context);  //新增消息
+                    //messageCreatPresenter.messageCreat(asrResponse,context);  //新增消息
                     executorService.submit(new Runnable() {
                         @Override
                         public void run() {
-                            //本地模型预测
-                            ResultBean resultBean = ResultDealUtils.modelForecast(getApplicationContext(), asrResponse, "u2a_speech", "123", context_Pe, query_Pe, tensorFlowInferenceIntent, tensorFlowInferenceSlot,dictionaryBean);
-                            Gson gson = new GsonBuilder().setPrettyPrinting()//打开之后log打印会出现空格
-                                    .disableHtmlEscaping()
-                                    .create();
-                            L.i("本地模型预测结果speech:"+ gson.toJson(resultBean));
-                            sendBroadcast(null,0,LOG_LOCAL,gson.toJson(resultBean));
+                            //拦截本地字符串匹配的语句
+                            if (asrResponse.contains("连续对话")&&asrResponse.contains("开")){
+                                sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"已为您开启连续对话");
+                            }else if (asrResponse.contains("连续对话")&&asrResponse.contains("关")){
+                                sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"已为您关闭连续对话");
+                            }else {
+                                //本地模型预测
+                                ResultBean resultBean = ResultDealUtils.modelForecast(getApplicationContext(), asrResponse, "u2a_speech", "123", context_Pe, query_Pe, tensorFlowInferenceIntent, tensorFlowInferenceSlot,dictionaryBean);
+                                Gson gson = new GsonBuilder()
+                                        .disableHtmlEscaping()
+                                        .create();
+                                L.i("本地模型预测结果speech:"+ gson.toJson(resultBean));
+                                sendBroadcast(null,0,LOG_LOCAL,gson.toJson(resultBean));
+                            }
 
                         }
                     });
@@ -489,7 +486,7 @@ public class NLPMessageService extends Service implements IMessageManageService,
                 }else if (ChatItemTypeConsts.SPEECH_TYPE_AUTO_U2A_SPEECH.equals(messageType)){
                     L.i("messageType：SPEECH_TYPE_AUTO_U2A_SPEECH："+new Gson().toJson(message.getMessage_body()));
                     //TODO 收到speech后发出去
-                    messageCreatPresenter.messageCreat(message.getMessage_body().getSpeech(),this);
+                    //messageCreatPresenter.messageCreat(message.getMessage_body().getSpeech(),this);
                 }
             }
         }
@@ -547,11 +544,11 @@ public class NLPMessageService extends Service implements IMessageManageService,
     public void getMessageCreatResp(Status status) {
         L.i("新增数据回调"+new Gson().toJson(status));
         //请求成功，将当前请求的次数设置为0
-        if (!useSocket){
-            nowTime = 0;
-            handler.removeCallbacks(task);
-            handler.post(task);
-        }
+//        if (!useSocket){
+//            nowTime = 0;
+//            handler.removeCallbacks(task);
+//            handler.post(task);
+//        }
     }
 
     @Override
@@ -614,17 +611,17 @@ public class NLPMessageService extends Service implements IMessageManageService,
 
     private void playingmusic(int type,String songUrl,int position) {
         //启动服务，播放音乐
-        intentMusic.putExtra("type",type);
-        intentMusic.putExtra("songUrl",songUrl);
-        intentMusic.putExtra("position",position);
-
-        if (type==MusicPlayerService.PLAT_MUSIC){
-            intentMusic.putExtra("isTTSing",false);
-            intentMusic.putExtra("playerType",playerType);
-        }else if (type==MusicPlayerService.PLAY_INFORM){
-            intentMusic.putExtra("playerSecond",playerSecond);
-        }
-        startService(intentMusic);
+//        intentMusic.putExtra("type",type);
+//        intentMusic.putExtra("songUrl",songUrl);
+//        intentMusic.putExtra("position",position);
+//
+//        if (type==MusicPlayerService.PLAT_MUSIC){
+//            intentMusic.putExtra("isTTSing",false);
+//            intentMusic.putExtra("playerType",playerType);
+//        }else if (type==MusicPlayerService.PLAY_INFORM){
+//            intentMusic.putExtra("playerSecond",playerSecond);
+//        }
+//        startService(intentMusic);
     }
 
 

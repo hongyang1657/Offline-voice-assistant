@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,8 +24,8 @@ import fitme.ai.zotyeautoassistant.bean.AccountCreate;
 import fitme.ai.zotyeautoassistant.bean.AccountGet;
 import fitme.ai.zotyeautoassistant.bean.CheckToken;
 import fitme.ai.zotyeautoassistant.bean.DeviceAllInfo;
-import fitme.ai.zotyeautoassistant.bean.DeviceConfigBean;
 import fitme.ai.zotyeautoassistant.bean.DevicesInfo;
+import fitme.ai.zotyeautoassistant.bean.ResultBean;
 import fitme.ai.zotyeautoassistant.bean.Status;
 import fitme.ai.zotyeautoassistant.bean.TokenInfo;
 import fitme.ai.zotyeautoassistant.presenter.DeviceBindPresenter;
@@ -34,30 +33,46 @@ import fitme.ai.zotyeautoassistant.presenter.DeviceBindSuccessPresenter;
 import fitme.ai.zotyeautoassistant.presenter.DeviceConfigPutPresenter;
 import fitme.ai.zotyeautoassistant.presenter.DeviceInfoUploadPresenter;
 import fitme.ai.zotyeautoassistant.presenter.DeviceSearchPresenter;
-import fitme.ai.zotyeautoassistant.presenter.GetDeviceConfigPresenter;
 import fitme.ai.zotyeautoassistant.presenter.GetUserIdByMobilePresenter;
 import fitme.ai.zotyeautoassistant.presenter.TokenPresenter;
 import fitme.ai.zotyeautoassistant.service.AsrService;
 import fitme.ai.zotyeautoassistant.service.ActivateService;
 import fitme.ai.zotyeautoassistant.service.NLPMessageService;
 import fitme.ai.zotyeautoassistant.service.TtsService;
+import fitme.ai.zotyeautoassistant.utils.Constants;
 import fitme.ai.zotyeautoassistant.utils.FlightControlContants;
 import fitme.ai.zotyeautoassistant.utils.L;
 import fitme.ai.zotyeautoassistant.utils.Mac;
 import fitme.ai.zotyeautoassistant.utils.SPConstants;
 import fitme.ai.zotyeautoassistant.utils.SharedPreferencesUtils;
+import fitme.ai.zotyeautoassistant.utils.SoundPlayUtils;
+import fitme.ai.zotyeautoassistant.utils.TimerUtil;
 import fitme.ai.zotyeautoassistant.utils.UDPSocket;
 import fitme.ai.zotyeautoassistant.view.impl.ILoginFragmentView;
+import fitme.ai.zotyeautoassistant.view.impl.TimerEndListener;
 import okhttp3.ResponseBody;
 
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_RESPONSE;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.FITME_SERVICE_COMMUNICATION;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.LOG;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.LOGIN_STATE;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.LOG_LOCAL;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.TTS_CONTROL;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.TTS_START;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.TTS_TEXT;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_RESPONSE;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_DEFAULT;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_ERROR;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_RESPONSE_TIMEOUT;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_SPEECH_END;
+import static fitme.ai.zotyeautoassistant.utils.Constants.AWAIT_WAKE_UP;
+import static fitme.ai.zotyeautoassistant.utils.Constants.FITME_SERVICE_COMMUNICATION;
+import static fitme.ai.zotyeautoassistant.utils.Constants.LOG;
+import static fitme.ai.zotyeautoassistant.utils.Constants.LOGIN_STATE;
+import static fitme.ai.zotyeautoassistant.utils.Constants.LOG_LOCAL;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_CONTROL;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_PLAY_END;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_START;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_STATE;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_TEXT;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_UNKNOW;
+import static fitme.ai.zotyeautoassistant.utils.Constants.WAKE_UP;
+import static fitme.ai.zotyeautoassistant.utils.Constants.WAKE_UP_STATE;
+import static fitme.ai.zotyeautoassistant.utils.FlightControlContants.FRAME_0;
+import static fitme.ai.zotyeautoassistant.utils.FlightControlContants.FRAME_1;
 
 /**
  * 用于众泰车机的语音交互程序
@@ -100,6 +115,8 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        //初始化
+        initView();
         executorService = Executors.newCachedThreadPool(); //线程池
         findViewById(R.id.bt_show_float).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,17 +163,27 @@ public class MainActivity extends Activity implements ILoginFragmentView{
                 });
             }
         });
-        //初始化
-        initView();
-        initPresenter();
+        findViewById(R.id.bt_test).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UDPSocket.getInstance().sendUdpAndWaitRes(FRAME_0);
+            }
+        });
+        tvLog.setVisibility(View.GONE);
+        tvLogLocal.setVisibility(View.VISIBLE);
+        isLocalLog = true;
+        //initPresenter();
         initActivateService();
         //initAsrService();
         initTtsService();
         initMessageService();
-
+        //广播接收
+        mBroadcastReceiver = new MBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(FITME_SERVICE_COMMUNICATION);
+        registerReceiver(mBroadcastReceiver,intentFilter);
         mContext = this;
     }
-
 
     //发送广播
     private void sendBroadcast(String key1,int value1,String key2,String value2){
@@ -164,6 +191,14 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         intent.setAction(FITME_SERVICE_COMMUNICATION);
         intent.putExtra(key1,value1);
         intent.putExtra(key2,value2);
+        sendBroadcast(intent);
+    }
+
+    //发送广播
+    private void sendBroadcast(String key,int value){
+        Intent intent = new Intent();
+        intent.setAction(FITME_SERVICE_COMMUNICATION);
+        intent.putExtra(key,value);
         sendBroadcast(intent);
     }
 
@@ -179,11 +214,7 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         deviceSearchPresenter = new DeviceSearchPresenter(this);
         deviceConfigPutPresenter = new DeviceConfigPutPresenter(this);
 
-        //广播接收
-        mBroadcastReceiver = new MBroadcastReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(FITME_SERVICE_COMMUNICATION);
-        registerReceiver(mBroadcastReceiver,intentFilter);
+
     }
 
     private void initView(){
@@ -194,6 +225,12 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         tvLogLocal = findViewById(R.id.tv_log_local);
         SharedPreferencesUtils.getInstance().setIntKeyValue(SPConstants.SP_AYAH_LONGTITUDE,1202106130);
         SharedPreferencesUtils.getInstance().setIntKeyValue(SPConstants.SP_AYAH_LATITUDE,302644590);
+        TimerUtil.getInstance().setOnTimerEndListener(new TimerEndListener() {
+            @Override
+            public void timeEnd() {
+                L.i("倒计时结束");
+            }
+        });
     }
 
     private void initActivateService(){
@@ -238,24 +275,27 @@ public class MainActivity extends Activity implements ILoginFragmentView{
     private class MBroadcastReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
+            int wakeUp = intent.getIntExtra(WAKE_UP_STATE,AWAIT_WAKE_UP);
             String log = intent.getStringExtra(LOG);
             String log_local = intent.getStringExtra(LOG_LOCAL);
             String asrResponse = intent.getStringExtra(ASR_RESPONSE);
+            int ttsState = intent.getIntExtra(TTS_STATE,TTS_UNKNOW);
+            int asrState = intent.getIntExtra(ASR_STATE,ASR_STATE_DEFAULT);
             //云端log
-            if (null!=log&&!"{\"messages\":[],\"status\":\"success\"}".equals(log)){
-                if (tvLog.getTextSize() < 50000){
-                    tvLog.append(formatJson(log)+"\n");
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-                        }
-                    });
-
-                }else {
-                    tvLog.setText(formatJson(log)+"\n");
-                }
-            }
+//            if (null!=log&&!"{\"messages\":[],\"status\":\"success\"}".equals(log)){
+//                if (tvLog.getTextSize() < 50000){
+//                    tvLog.append(formatJson(log)+"\n");
+//                    new Handler().post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+//                        }
+//                    });
+//
+//                }else {
+//                    tvLog.setText(formatJson(log)+"\n");
+//                }
+//            }
             //本地log
             if (null!=log_local&&!"{\"messages\":[],\"status\":\"success\"}".equals(log_local)){
                 if (tvLogLocal.getTextSize() < 50000){
@@ -270,17 +310,136 @@ public class MainActivity extends Activity implements ILoginFragmentView{
                 }else {
                     tvLogLocal.setText(formatJson(log_local)+"\n");
                 }
+                Gson gson = new Gson();
+                ResultBean resultBean = gson.fromJson(log_local, ResultBean.class);
+                L.i("result---intent:"+resultBean.getIntent());
+                switch (resultBean.getIntent()){
+                    case Constants.START_FLYING_CONTROL_SYSTEM:
+                        control(resultBean.getIntent());
+                        break;
+                    case Constants.ENTER_AIR_LINE:
+                        control(resultBean.getIntent());
+                        break;
+                    case Constants.TAKE_OFF:
+                        control(resultBean.getIntent());
+                        break;
+                    case Constants.INSTRUCT_FLIGHT:
+                        control(resultBean.getIntent());
+                        break;
+                    case Constants.TURN_LEFT:
+                        control(resultBean.getIntent());
+                        break;
+                    case Constants.TURN_RIGHT:
+                        control(resultBean.getIntent());
+                        break;
+                    case Constants.STRAIGHT_FLIGHT:
+                        control(resultBean.getIntent());
+                        break;
+                    case Constants.CLIMB:
+                        control(resultBean.getIntent());
+                        break;
+                    case Constants.LEVEL_FLIGHT:
+                        control(resultBean.getIntent());
+                        break;
+                    case Constants.DECLINE:
+                        control(resultBean.getIntent());
+                        break;
+                    case Constants.AUTO_FLIGHT:
+                        control(resultBean.getIntent());
+                        break;
+                    case Constants.CHECK_ENGINE:
+                        control(resultBean.getIntent());
+                        break;
+                    case Constants.RAISE_LANDING_GEAR:
+                        control(resultBean.getIntent());
+                        break;
+                    case Constants.PUT_LANDING_GEAR:
+                        control(resultBean.getIntent());
+                        break;
+                    case Constants.STOP_FLYING_CONTROL_SYSTEM:
+                        control(resultBean.getIntent());
+                        break;
+//                    case Constants.CHAT:
+//                        control(resultBean.getIntent());
+//                        break;
+                    case "确认执行指令":
+                        //执行缓存1分钟的intent,如果缓存过期，则不作处理
+                        if (isContinuousDialogue){          //开启连续对话情况下
+                            if (TimerUtil.getInstance().getTimerState()&&null!=cacheIntent&&!"".equals(cacheIntent)){
+                                sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"为您执行"+cacheIntent+"操作");
+                                //TODO 执行命令
+                                executiveCommand(cacheIntent);
+                                L.i("发送udp");
+                                cacheIntent = "";  //执行后清空缓存
+                            }else {         //没有缓存指令，继续静默唤醒
+                                //静默唤醒
+                                sendBroadcast(WAKE_UP_STATE,WAKE_UP);
+                            }
+                        }else {
+
+                        }
+
+                        break;
+                    case "关闭二次确认功能":
+                        sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"已为您关闭二次确认功能");
+                        isOpenConfirmation = false;
+                        break;
+                    case "开启二次确认功能":
+                        sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"已为您打开二次确认功能");
+                        isOpenConfirmation = true;
+                        break;
+                    default:
+                        //TODO 模拟闲聊，连续对话开启情况下不回复，直接进入下次唤醒
+                        if (isContinuousDialogue&&TimerUtil.getInstance().getTimerState()){
+                            //静默唤醒
+                            sendBroadcast(WAKE_UP_STATE,WAKE_UP);
+                        }else if(!isContinuousDialogue){
+                            //tts：问的问题貌似不太清楚，可以再问一遍
+                            sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"问的问题貌似不太清楚，可以再说一遍");
+                        }
+                        break;
+                }
+
             }
+            //唤醒
+            if (wakeUp==WAKE_UP){
+                //L.i("唤醒");
+
+            }
+            //asr
             if (null!=asrResponse&&!asrResponse.equals("")){
                 tvLog.append("\nASR:"+asrResponse+"\n");
                 tvLogLocal.append("\nASR:"+asrResponse+"\n");
-                if (asrResponse.equals("一键起飞")){
-                    L.i("发送udp");
-                    UDPSocket.getInstance().sendUdpAndWaitRes(FlightControlContants.TAKE_OFF);
+                if (asrResponse.contains("连续对话")&&asrResponse.contains("开")){
+                    isContinuousDialogue = true;
+                }else if (asrResponse.contains("连续对话")&&asrResponse.contains("关")){
+                    isContinuousDialogue = false;
+                    TimerUtil.getInstance().stop();
+                }
+            }
+            //tts状态
+            if (ttsState==TTS_PLAY_END){
+                if (isContinuousDialogue&&TimerUtil.getInstance().getTimerState()){
+                    //静默唤醒
+                    sendBroadcast(WAKE_UP_STATE,WAKE_UP);
+                }
+            }
+            //asr状态
+            if (asrState==ASR_STATE_ERROR||asrState==ASR_STATE_RESPONSE_TIMEOUT){  //识别出错,识别超时
+                if (isContinuousDialogue&&TimerUtil.getInstance().getTimerState()){
+                    //静默唤醒
+                    sendBroadcast(WAKE_UP_STATE,WAKE_UP);
+                }else if (!isContinuousDialogue){
+                    //tts：问的问题貌似不太清楚，可以再问一遍
+                    sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"问的问题貌似不太清楚，可以再问一遍");
                 }
             }
         }
     }
+    //是否开启连续对话功能
+    private boolean isContinuousDialogue = true;
+    //是否开启二次确认功能
+    private boolean isOpenConfirmation = true;
 
 
     @Override
@@ -443,5 +602,67 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         intent.setAction(FITME_SERVICE_COMMUNICATION);
         intent.putExtra(key1,value1);
         sendBroadcast(intent);
+    }
+
+    //执行控制命令
+    private String cacheIntent;
+    private void control(String intent){
+        TimerUtil.getInstance().start();    //使用语音唤醒 开始进入倒计时
+        if (isOpenConfirmation){      //需要二次确认
+            sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"请确认是否要执行"+intent+"操作");
+            //TODO 记录用户的控制指令，等待用户确认
+            cacheIntent = intent;
+        }else {        //不需要二次确认，直接执行命令
+            sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"为您执行"+intent+"操作");
+            //TODO 发送UDP指令
+            L.i("发送udp");
+            executiveCommand(intent);
+        }
+    }
+
+    //根据intent执行命令
+//    private void executiveCommand(final String intent){
+//        executorService.submit(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            UDPSocket.getInstance().sendUdpAndWaitRes(FlightControlContants.FRAME_0);
+//                        }
+//                    });
+//
+//                    Thread.sleep(50);
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            UDPSocket.getInstance().sendUdpAndWaitRes(FlightControlContants.FRAME_1);
+//                        }
+//                    });
+//
+//                    Thread.sleep(50);
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            UDPSocket.getInstance().sendUdpAndWaitRes(FlightControlContants.getCommandByIntent(intent));
+//                        }
+//                    });
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//    }
+
+    private void executiveCommand(String intent){
+        UDPSocket.getInstance().sendUdpAndWaitRes(byteMerger(byteMerger(FRAME_0,FRAME_1),FlightControlContants.getCommandByIntent(intent)));
+    }
+
+    public static byte[] byteMerger(byte[] bt1, byte[] bt2){
+        byte[] bt3 = new byte[bt1.length+bt2.length];
+        System.arraycopy(bt1, 0, bt3, 0, bt1.length);
+        System.arraycopy(bt2, 0, bt3, bt1.length, bt2.length);
+        return bt3;
     }
 }

@@ -34,7 +34,7 @@ public class MyApplication extends Application {
         super.onCreate();
         instance=this;
         mFloatingView = new FloatingView(this);
-        AMapLocationUtils.getInstances(instance).initLocation();  //初始化高德定位
+        //AMapLocationUtils.getInstances(instance).initLocation();  //初始化高德定位
     }
 
     public FloatingView getmFloatingView() {
@@ -69,4 +69,6 @@ public class MyApplication extends Application {
     public void setSceneSpeechs(List<String> sceneSpeechs) {
         this.sceneSpeechs = sceneSpeechs;
     }
+
+
 }

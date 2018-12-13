@@ -22,19 +22,20 @@ import fitme.ai.zotyeautoassistant.utils.IAppendAudio;
 import fitme.ai.zotyeautoassistant.utils.L;
 import fitme.ai.zotyeautoassistant.utils.SSRecorder;
 
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_RESPONSE;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE_ERROR;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE_RESPONSE_TIMEOUT;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE_SPEECH_END;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE_SPEECH_START;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_STATE_SPEECH_TIMEOUT;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.ASR_VOLUME;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.AWAIT_WAKE_UP;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.FITME_SERVICE_COMMUNICATION;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.TAG;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.WAKE_UP;
-import static fitme.ai.zotyeautoassistant.utils.Contansts.WAKE_UP_STATE;
+import static com.iflytek.speech.libisssr.ISS_SR_MODE_LOCAL_REC;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_RESPONSE;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_ERROR;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_RESPONSE_TIMEOUT;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_SPEECH_END;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_SPEECH_START;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_SPEECH_TIMEOUT;
+import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_VOLUME;
+import static fitme.ai.zotyeautoassistant.utils.Constants.AWAIT_WAKE_UP;
+import static fitme.ai.zotyeautoassistant.utils.Constants.FITME_SERVICE_COMMUNICATION;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TAG;
+import static fitme.ai.zotyeautoassistant.utils.Constants.WAKE_UP;
+import static fitme.ai.zotyeautoassistant.utils.Constants.WAKE_UP_STATE;
 
 public class AsrService extends Service implements IAppendAudio {
 
@@ -138,7 +139,7 @@ public class AsrService extends Service implements IAppendAudio {
             if (wakeUp==WAKE_UP){
                 //开始识别
                 startRecord();
-                err = libisssr.start("all", 2, null);
+                err = libisssr.start("all", ISS_SR_MODE_LOCAL_REC, null);
                 //弹出悬浮窗
                 MyApplication.getInstance().getmFloatingView().show();
                 //悬浮窗计时归零
