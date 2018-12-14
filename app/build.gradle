@@ -48,4 +48,5 @@ dependencies {
     implementation files('libs/AMap_Location_V3.7.0_20171218.jar')
     //implementation files('libs/client-1.0.2.jar')
     //implementation files('libs/common-1.0.2.jar')
+    implementation 'com.belerweb:pinyin4j:2.5.1'
 }

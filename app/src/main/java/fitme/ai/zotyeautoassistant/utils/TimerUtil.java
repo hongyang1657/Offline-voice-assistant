@@ -22,9 +22,9 @@ public class TimerUtil{
     private Runnable task = new Runnable() {
         @Override
         public void run() {
-            if (nowTime<60){
+            if (nowTime<600){
                 nowTime++;
-                L.i("计时60秒:"+nowTime);
+                //L.i("计时60秒:"+nowTime);
                 handler.postDelayed(task,1000);
                 isTimering = true;
             }else {

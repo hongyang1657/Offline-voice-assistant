@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -43,6 +44,7 @@ import fitme.ai.zotyeautoassistant.utils.Constants;
 import fitme.ai.zotyeautoassistant.utils.FlightControlContants;
 import fitme.ai.zotyeautoassistant.utils.L;
 import fitme.ai.zotyeautoassistant.utils.Mac;
+import fitme.ai.zotyeautoassistant.utils.PinyinDemo;
 import fitme.ai.zotyeautoassistant.utils.SPConstants;
 import fitme.ai.zotyeautoassistant.utils.SharedPreferencesUtils;
 import fitme.ai.zotyeautoassistant.utils.SoundPlayUtils;
@@ -183,6 +185,10 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         intentFilter.addAction(FITME_SERVICE_COMMUNICATION);
         registerReceiver(mBroadcastReceiver,intentFilter);
         mContext = this;
+
+        //test
+
+        L.i(PinyinDemo.ToPinyin("启动飞控软件装订航线一键起飞指令飞行左飞右飞直飞爬升平飞下降自主飞行查看发动机页面收起落架放起落架关闭飞控软件"));
     }
 
     //发送广播
@@ -310,6 +316,7 @@ public class MainActivity extends Activity implements ILoginFragmentView{
                 }else {
                     tvLogLocal.setText(formatJson(log_local)+"\n");
                 }
+                Log.i("debug_result", "onReceive: "+log_local);
                 Gson gson = new Gson();
                 ResultBean resultBean = gson.fromJson(log_local, ResultBean.class);
                 L.i("result---intent:"+resultBean.getIntent());
@@ -404,7 +411,7 @@ public class MainActivity extends Activity implements ILoginFragmentView{
             //唤醒
             if (wakeUp==WAKE_UP){
                 //L.i("唤醒");
-
+                Log.i("debug_result", "唤醒");
             }
             //asr
             if (null!=asrResponse&&!asrResponse.equals("")){
