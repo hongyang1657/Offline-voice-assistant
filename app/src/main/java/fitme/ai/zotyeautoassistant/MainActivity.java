@@ -186,9 +186,6 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         registerReceiver(mBroadcastReceiver,intentFilter);
         mContext = this;
 
-        //test
-
-        L.i(PinyinDemo.ToPinyin("启动飞控软件装订航线一键起飞指令飞行左飞右飞直飞爬升平飞下降自主飞行查看发动机页面收起落架放起落架关闭飞控软件"));
     }
 
     //发送广播
@@ -365,6 +362,8 @@ public class MainActivity extends Activity implements ILoginFragmentView{
                         break;
                     case Constants.STOP_FLYING_CONTROL_SYSTEM:
                         control(resultBean.getIntent());
+                    case Constants.CLOSE_ENGINE_CONSOLE:
+                        control(resultBean.getIntent());
                         break;
 //                    case Constants.CHAT:
 //                        control(resultBean.getIntent());
@@ -388,11 +387,13 @@ public class MainActivity extends Activity implements ILoginFragmentView{
 
                         break;
                     case "关闭二次确认功能":
-                        sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"已为您关闭二次确认功能");
+                        sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"已为您关闭语音确认功能");
+                        executiveCommand(Constants.CLOSE_CONFIRMATION);
                         isOpenConfirmation = false;
                         break;
                     case "开启二次确认功能":
-                        sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"已为您打开二次确认功能");
+                        sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"已为您打开语音确认功能");
+                        executiveCommand(Constants.OPEN_CONFIRMATION);
                         isOpenConfirmation = true;
                         break;
                     default:

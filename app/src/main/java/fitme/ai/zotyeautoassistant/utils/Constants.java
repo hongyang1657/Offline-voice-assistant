@@ -48,11 +48,16 @@ public class Constants {
     public static final String CLIMB = "爬升";
     public static final String LEVEL_FLIGHT = "平飞";
     public static final String DECLINE = "下降";
+    public static final String CLOSE_ENGINE_CONSOLE = "关发动机页面";
     public static final String AUTO_FLIGHT = "自主飞行";
     public static final String CHECK_ENGINE = "查看发动机页面";
     public static final String RAISE_LANDING_GEAR = "收起落架";
     public static final String PUT_LANDING_GEAR = "放起落架";
     public static final String STOP_FLYING_CONTROL_SYSTEM = "关闭飞控软件";
+
+    //没有intent，前端过滤
+    public static final String OPEN_CONFIRMATION = "打开语音确认";
+    public static final String CLOSE_CONFIRMATION = "关闭语音确认";
 
     public static final String CHAT = "回应聊天";
 }

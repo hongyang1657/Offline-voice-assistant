@@ -19,6 +19,7 @@ public class FlightControlContants {
     public static final byte[] CLIMB = {0x45};  //爬升
     public static final byte[] LEVEL_FLIGHT = {0x47};  //平飞
     public static final byte[] DECLINE = {0x49};  //下降
+    public static final byte[] CLOSE_ENGINE_CONSOLE = {0x51};  //关发动机页面
     public static final byte[] AUTO_FLIGHT = {0x53};  //自主飞行
     public static final byte[] CHECK_ENGINE = {0x55};  //查看发动机页面
     public static final byte[] RAISE_LANDING_GEAR = {0x57};  //收起落架
@@ -46,11 +47,14 @@ public class FlightControlContants {
         map.put(Constants.CLIMB,CLIMB);
         map.put(Constants.LEVEL_FLIGHT,LEVEL_FLIGHT);
         map.put(Constants.DECLINE,DECLINE);
+        map.put(Constants.CLOSE_ENGINE_CONSOLE,CLOSE_ENGINE_CONSOLE);
         map.put(Constants.AUTO_FLIGHT,AUTO_FLIGHT);
         map.put(Constants.CHECK_ENGINE,CHECK_ENGINE);
         map.put(Constants.RAISE_LANDING_GEAR,RAISE_LANDING_GEAR);
         map.put(Constants.PUT_LANDING_GEAR,PUT_LANDING_GEAR);
         map.put(Constants.STOP_FLYING_CONTROL_SYSTEM,EXIT);
+        map.put(Constants.OPEN_CONFIRMATION,OPEN_CONFIRMATION);
+        map.put(Constants.CLOSE_CONFIRMATION,CLOSE_CONFIRMATION);
     }
 
     public static byte[] getCommandByIntent(String intent){

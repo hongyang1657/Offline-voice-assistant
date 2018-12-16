@@ -83,7 +83,7 @@ public class MusicPlayerService extends Service implements IMediaPlayerView {
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        L.i("收到播放指令:"+intent.getIntExtra("type",-1));
+        //L.i("收到播放指令:"+intent.getIntExtra("type",-1));
         final String songUrl = intent.getStringExtra("songUrl");
         final int position = intent.getIntExtra("position",0);     //播放音乐的时候跳到position的位置
         final String playerType = intent.getStringExtra("playerType");

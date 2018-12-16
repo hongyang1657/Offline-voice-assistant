@@ -5,7 +5,6 @@ import android.util.Log;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -486,7 +485,7 @@ public class ModelSwitchFactory {
      * @param chars   传入的数据源
      * @return
      */
-    public static List<List<Integer>> Intent2Vector(Context context, List<List<String>> chars,DictionaryBean dictionaryBean) {
+    public static List<List<Integer>> Intent2Vector(Context context, List<List<String>> chars, DictionaryBean dictionaryBean) {
         //定义返回数组
         List<List<Integer>> resultList = new ArrayList<>();
         //获取词典
@@ -506,7 +505,9 @@ public class ModelSwitchFactory {
         List<Integer> x_context = new ArrayList<>();
         List<Integer> x_query = new ArrayList<>();
         List<Integer> context_chars_seq = new ArrayList<>();
+        List<Integer> context_chars_seq1 = new ArrayList<>();
         List<Integer> query_chars_seq = new ArrayList<>();
+        List<Integer> query_chars_seq1 = new ArrayList<>();
         //处理上下文数组
         if (context_chars.size() != 0) {
             //有上下文数据
@@ -534,32 +535,39 @@ public class ModelSwitchFactory {
         int true_length_context = context_chars.size();
         int true_length_query = query_chars.size();
         //处理上下文数组大于200截取前200，不足200
+        Log.i("aaa", "true_length_context截取前的长度：" + true_length_context);
         if (true_length_context > 200) {
             List<Integer> subList = context_chars_seq.subList(0, 200);
-            context_chars_seq.clear();
-            context_chars_seq.addAll(subList);
+            Log.i("aaa", "true_length_context截取后的长度：" + subList.size());
+//            context_chars_seq.clear();
+            context_chars_seq1.addAll(subList);
+            x_context.addAll(context_chars_seq1);
         } else {
             int indexFromCharPad = DictionaryValueGetUtils.getIndexFromChar(char2indexMap, "[pad]");
             while (context_chars_seq.size() < 200) { // TODO: 2018/7/18 数组长度是否可以补齐待测试
                 //真实长度如果不足200，则使用“[pad]”的index补齐
                 context_chars_seq.add(0, indexFromCharPad);
             }
+            x_context.addAll(context_chars_seq);
         }
         //处理query_chars数组大于30的截取前30，不足30的补齐
+        Log.i("aaa", "true_length_query截取前的长度：" + true_length_query);
         if (true_length_query > 30) {
             List<Integer> subList = query_chars_seq.subList(0, 30);
-            query_chars_seq.clear();
-            query_chars_seq.addAll(subList);
+            Log.i("aaa", "true_length_query截取后的长度：" + subList.size());
+//            query_chars_seq.clear();
+            query_chars_seq1.addAll(subList);//在这一行报错，集合修改错误
         } else {
             int indexFromCharPad = DictionaryValueGetUtils.getIndexFromChar(char2indexMap, "[pad]");
             while (query_chars_seq.size() < 30) { // TODO: 2018/7/18 数组长度是否可以补齐待测试
                 //真实长度如果不足30，则使用“[pad]”的index补齐
                 query_chars_seq.add(0, indexFromCharPad);
             }
+            x_query.addAll(query_chars_seq);
         }
         //返回数据
-        x_context.addAll(context_chars_seq);
-        x_query.addAll(query_chars_seq);
+//        x_context.addAll(context_chars_seq);
+//        x_query.addAll(query_chars_seq);
         resultList.add(x_context);
         resultList.add(x_query);
         return resultList;

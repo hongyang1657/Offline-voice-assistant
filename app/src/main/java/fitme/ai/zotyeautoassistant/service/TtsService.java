@@ -158,7 +158,7 @@ public class TtsService extends Service{
             int wakeUp = intent.getIntExtra(WAKE_UP_STATE,AWAIT_WAKE_UP);
 
             if (wakeUp==WAKE_UP){
-                L.i("唤醒了！！！！清空待播放tts列表");
+                //L.i("唤醒了！！！！清空待播放tts列表");
                 speechList.clear();
             }
 

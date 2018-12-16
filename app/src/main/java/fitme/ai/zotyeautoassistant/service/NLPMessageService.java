@@ -43,6 +43,7 @@ import fitme.ai.zotyeautoassistant.utils.ChatItemTypeConsts;
 import fitme.ai.zotyeautoassistant.utils.DictionaryGetUtils;
 import fitme.ai.zotyeautoassistant.utils.IAppendAudio;
 import fitme.ai.zotyeautoassistant.utils.L;
+import fitme.ai.zotyeautoassistant.utils.PinyinDemo;
 import fitme.ai.zotyeautoassistant.utils.ResultDealUtils;
 import fitme.ai.zotyeautoassistant.utils.SSRecorder;
 import fitme.ai.zotyeautoassistant.utils.StringUtils;
@@ -340,7 +341,13 @@ public class NLPMessageService extends Service implements IMessageManageService,
                                 sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"已为您关闭连续对话");
                             }else {
                                 //本地模型预测
-                                ResultBean resultBean = ResultDealUtils.modelForecast(getApplicationContext(), asrResponse, "u2a_speech", "123", context_Pe, query_Pe, tensorFlowInferenceIntent, tensorFlowInferenceSlot,dictionaryBean);
+                                //拼音加中文
+                                //String pinyinAndChinese = PinyinDemo.ToPinyin(asrResponse)+asrResponse;
+                                //L.i("ASR拼音+中文:"+pinyinAndChinese);
+                                //纯拼音
+                                String piniyn = PinyinDemo.ToPinyin(asrResponse).trim();
+                                L.i("ASR拼音:"+piniyn);
+                                ResultBean resultBean = ResultDealUtils.modelForecast(getApplicationContext(), piniyn, "u2a_speech", "123", context_Pe, query_Pe, tensorFlowInferenceIntent, tensorFlowInferenceSlot,dictionaryBean);
                                 Gson gson = new GsonBuilder()
                                         .disableHtmlEscaping()
                                         .create();
@@ -713,7 +720,7 @@ public class NLPMessageService extends Service implements IMessageManageService,
                     JSONObject object = new JSONObject(lParam);
                     String text = object.getString("text");
                     String normal_text = object.getString("normal_text");
-                    Log.i(TAG,"text:"+text);
+                    //Log.i(TAG,"text:"+text);
                     Log.i(TAG,"normal_text:"+normal_text);
                     sendBroadcast(ASR_RESPONSE,normal_text);
                     //TODO 重置FloatingView隐藏时间

@@ -57,12 +57,12 @@ public class PinyinDemo {
         for (int i = 0; i < newChar.length; i++) {
             if (newChar[i] > 128) {
                 try {
-                    pinyinStr += PinyinHelper.toHanyuPinyinStringArray(newChar[i], defaultFormat)[0];
+                    pinyinStr += PinyinHelper.toHanyuPinyinStringArray(newChar[i], defaultFormat)[0]+" ";
                 } catch (BadHanyuPinyinOutputFormatCombination e) {
                     e.printStackTrace();
                 }
             }else{
-                pinyinStr += newChar[i];
+                pinyinStr += newChar[i]+" ";
             }
         }
         return pinyinStr;
