@@ -20,6 +20,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/tv_speech"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="好的，为你导航去西胡"
+        android:textSize="24sp"
+        android:padding="16dp"
+        android:textColor="@color/colorWhiteText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <fitme.ai.zotyeautoassistant.view.LineWaveVoiceView
         android:id="@+id/line_wave_view"
         app:voiceLineColor="@color/color_1EC4BD"

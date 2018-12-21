@@ -46,6 +46,7 @@ import fitme.ai.zotyeautoassistant.utils.L;
 import fitme.ai.zotyeautoassistant.utils.PinyinDemo;
 import fitme.ai.zotyeautoassistant.utils.ResultDealUtils;
 import fitme.ai.zotyeautoassistant.utils.SSRecorder;
+import fitme.ai.zotyeautoassistant.utils.SoundPlayUtils;
 import fitme.ai.zotyeautoassistant.utils.StringUtils;
 import fitme.ai.zotyeautoassistant.utils.VolumeUtil;
 import fitme.ai.zotyeautoassistant.view.impl.IMessageManageService;
@@ -649,6 +650,7 @@ public class NLPMessageService extends Service implements IMessageManageService,
 
     private void startRecord(){
         Log.i(TAG, "startRecord: 开始录音");
+        SoundPlayUtils.getInstance(getApplication()).playSound(SoundPlayUtils.WAKE_UP_SOUND);
         SSRecorder.instance().start(SSRecorder.RECORDTYPE.RECORD_SR);
     }
     private void stopRecord(){

@@ -22,7 +22,7 @@ import fitme.ai.zotyeautoassistant.view.impl.UdpReceiveListener;
 public class UDPSocket {
 
     private static final int DEFAULT_PORT = 57816;//端口号57816  18001
-    private static final int MAX_DATA_PACKET_LENGTH = 32;
+    private static final int MAX_DATA_PACKET_LENGTH = 256;
     //private static final String HOST = "226.0.0.22";
     private static final String HOST = "255.255.255.255";
 

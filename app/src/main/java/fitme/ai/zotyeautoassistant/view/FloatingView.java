@@ -19,11 +19,13 @@ import fitme.ai.zotyeautoassistant.R;
 import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_RESPONSE;
 import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_VOLUME;
 import static fitme.ai.zotyeautoassistant.utils.Constants.FITME_SERVICE_COMMUNICATION;
+import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_TEXT;
 
 public class FloatingView extends FrameLayout{
     private Context mContext;
     private View mView;
     private TextView tvAsr;
+    private TextView tvSpeech;
     private LinearLayout floatingView;
     private LineWaveVoiceView lineWaveVoiceView;
     private WindowManager.LayoutParams mParams;
@@ -36,6 +38,7 @@ public class FloatingView extends FrameLayout{
         LayoutInflater mLayoutInflater = LayoutInflater.from(context);
         mView = mLayoutInflater.inflate(R.layout.floating_view,null);
         tvAsr = mView.findViewById(R.id.tv_asr);
+        tvSpeech = mView.findViewById(R.id.tv_speech);
         lineWaveVoiceView = mView.findViewById(R.id.line_wave_view);
         floatingView = mView.findViewById(R.id.floating_view);
         mWindowManager = FloatingManager.getInstance(mContext);
@@ -50,6 +53,7 @@ public class FloatingView extends FrameLayout{
             @Override
             public void onClick(View v) {
                 hide();
+                mWindowManager.removeView(mView);
             }
         });
     }
@@ -60,9 +64,13 @@ public class FloatingView extends FrameLayout{
         @Override
         public void onReceive(Context context, Intent intent) {
             String asrResponse = intent.getStringExtra(ASR_RESPONSE);
+            String tts_text = intent.getStringExtra(TTS_TEXT);
             int volume = intent.getIntExtra(ASR_VOLUME,0);
             if (null!=asrResponse&&!asrResponse.equals("")){
                 tvAsr.setText(asrResponse);
+            }
+            if (null!=tts_text&&!tts_text.equals("")){
+                tvSpeech.setText(tts_text);
             }
             //L.i("音量大小："+volume/20);
             lineWaveVoiceView.startRecord(volume/20);
@@ -92,15 +100,17 @@ public class FloatingView extends FrameLayout{
 
         mParams.width = LayoutParams.MATCH_PARENT;
         mParams.height = LayoutParams.WRAP_CONTENT;
+        mWindowManager.addView(mView,mParams);
     }
 
     public void show(){
         tvAsr.setText("");
-        mWindowManager.addView(mView,mParams);
+        tvSpeech.setText("");
+        //mWindowManager.addView(mView,mParams);
     }
 
     public void hide(){
-        mWindowManager.removeView(mView);
+        //mWindowManager.removeView(mView);
         lineWaveVoiceView.stopRecord();
     }
 

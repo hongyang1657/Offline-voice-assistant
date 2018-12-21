@@ -64,7 +64,7 @@ public class ActivateService extends Service implements IAppendAudio{
                 TimerUtil.getInstance().start();    //使用语音唤醒 开始进入倒计时
                 sendBroadcast(WAKE_UP_STATE,WAKE_UP);
                 sendBroadcast(TTS_CONTROL,TTS_STOP);   //停止播放正在执行的tts
-                SoundPlayUtils.getInstance(mContext).playSound(SoundPlayUtils.WAKE_UP_SOUND);
+                //SoundPlayUtils.getInstance(mContext).playSound(SoundPlayUtils.WAKE_UP_SOUND);
                 //降低音乐播放
                 playingmusic(MusicPlayerService.REDUCE_MUSIC_VOLUME);
 

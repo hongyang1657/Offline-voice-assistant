@@ -316,95 +316,164 @@ public class MainActivity extends Activity implements ILoginFragmentView{
                 Log.i("debug_result", "onReceive: "+log_local);
                 Gson gson = new Gson();
                 ResultBean resultBean = gson.fromJson(log_local, ResultBean.class);
-                L.i("result---intent:"+resultBean.getIntent());
+                L.i("result---intent:"+resultBean.getIntent()+"预测分数intent_score："+resultBean.getIntent_score());
                 switch (resultBean.getIntent()){
                     case Constants.START_FLYING_CONTROL_SYSTEM:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case Constants.ENTER_AIR_LINE:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case Constants.TAKE_OFF:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case Constants.INSTRUCT_FLIGHT:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case Constants.TURN_LEFT:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case Constants.TURN_RIGHT:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case Constants.STRAIGHT_FLIGHT:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case Constants.CLIMB:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case Constants.LEVEL_FLIGHT:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case Constants.DECLINE:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.97f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case Constants.AUTO_FLIGHT:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case Constants.CHECK_ENGINE:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case Constants.RAISE_LANDING_GEAR:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case Constants.PUT_LANDING_GEAR:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case Constants.STOP_FLYING_CONTROL_SYSTEM:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                     case Constants.CLOSE_ENGINE_CONSOLE:
-                        control(resultBean.getIntent());
+                        if (resultBean.getIntent_score()>0.9f){
+                            control(resultBean.getIntent());
+                        }else {
+                            defaultChat();
+                        }
                         break;
-//                    case Constants.CHAT:
-//                        control(resultBean.getIntent());
-//                        break;
+
                     case "确认执行指令":
-                        //执行缓存1分钟的intent,如果缓存过期，则不作处理
-                        if (isContinuousDialogue){          //开启连续对话情况下
-                            if (TimerUtil.getInstance().getTimerState()&&null!=cacheIntent&&!"".equals(cacheIntent)){
-                                sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"为您执行"+cacheIntent+"操作");
-                                //TODO 执行命令
-                                executiveCommand(cacheIntent);
-                                L.i("发送udp");
-                                cacheIntent = "";  //执行后清空缓存
-                            }else {         //没有缓存指令，继续静默唤醒
-                                //静默唤醒
-                                sendBroadcast(WAKE_UP_STATE,WAKE_UP);
+                        //分数大于阈值
+                        if (resultBean.getIntent_score()>0.7f){
+                            //执行缓存1分钟的intent,如果缓存过期，则不作处理
+                            if (isContinuousDialogue){          //开启连续对话情况下
+                                if (TimerUtil.getInstance().getTimerState()&&null!=cacheIntent&&!"".equals(cacheIntent)){
+                                    sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"为您执行"+cacheIntent+"操作");
+                                    //TODO 执行命令
+                                    executiveCommand(cacheIntent);
+                                    L.i("发送udp");
+                                    cacheIntent = "";  //执行后清空缓存
+                                }else {         //没有缓存指令，继续静默唤醒
+                                    //静默唤醒
+                                    sendBroadcast(WAKE_UP_STATE,WAKE_UP);
+                                }
+                            }else {
+
                             }
                         }else {
-
+                            defaultChat();
                         }
+
 
                         break;
                     case "关闭二次确认功能":
-                        sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"已为您关闭语音确认功能");
-                        executiveCommand(Constants.CLOSE_CONFIRMATION);
-                        isOpenConfirmation = false;
+                        if (resultBean.getIntent_score()>0.9f){
+                            sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"已为您关闭语音确认功能");
+                            executiveCommand(Constants.CLOSE_CONFIRMATION);
+                            isOpenConfirmation = false;
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     case "开启二次确认功能":
-                        sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"已为您打开语音确认功能");
-                        executiveCommand(Constants.OPEN_CONFIRMATION);
-                        isOpenConfirmation = true;
+                        if (resultBean.getIntent_score()>0.9f){
+                            sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"已为您打开语音确认功能");
+                            executiveCommand(Constants.OPEN_CONFIRMATION);
+                            isOpenConfirmation = true;
+                        }else {
+                            defaultChat();
+                        }
                         break;
                     default:
-                        //TODO 模拟闲聊，连续对话开启情况下不回复，直接进入下次唤醒
-                        if (isContinuousDialogue&&TimerUtil.getInstance().getTimerState()){
-                            //静默唤醒
-                            sendBroadcast(WAKE_UP_STATE,WAKE_UP);
-                        }else if(!isContinuousDialogue){
-                            //tts：问的问题貌似不太清楚，可以再问一遍
-                            sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"问的问题貌似不太清楚，可以再说一遍");
-                        }
+                        defaultChat();
                         break;
                 }
 
@@ -448,6 +517,17 @@ public class MainActivity extends Activity implements ILoginFragmentView{
     private boolean isContinuousDialogue = true;
     //是否开启二次确认功能
     private boolean isOpenConfirmation = true;
+
+    private void defaultChat(){
+        //模拟闲聊，连续对话开启情况下不回复，直接进入下次唤醒
+        if (isContinuousDialogue&&TimerUtil.getInstance().getTimerState()){
+            //静默唤醒
+            sendBroadcast(WAKE_UP_STATE,WAKE_UP);
+        }else if(!isContinuousDialogue){
+            //tts：问的问题貌似不太清楚，可以再问一遍
+            sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,"问的问题貌似不太清楚，可以再说一遍");
+        }
+    }
 
 
     @Override

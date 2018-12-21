@@ -2,6 +2,7 @@ package fitme.ai.zotyeautoassistant;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.widget.TextView;
 
 import java.util.Arrays;
@@ -30,6 +31,8 @@ public class TestActivity extends Activity{
                     }
                 });
                 L.i("收到的指令："+Arrays.toString(bytes));
+                String str = new String(Base64.decode(bytes,Base64.DEFAULT));
+                L.i("解码后："+str);
             }
 
             @Override
@@ -37,9 +40,5 @@ public class TestActivity extends Activity{
 
             }
         });
-
-        byte a = 0x34;
-        L.i("a:"+a);
-        textView.setText("a:"+a);
     }
 }
