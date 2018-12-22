@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -52,6 +53,7 @@ import fitme.ai.zotyeautoassistant.utils.TimerUtil;
 import fitme.ai.zotyeautoassistant.utils.UDPSocket;
 import fitme.ai.zotyeautoassistant.view.impl.ILoginFragmentView;
 import fitme.ai.zotyeautoassistant.view.impl.TimerEndListener;
+import fitme.ai.zotyeautoassistant.view.impl.UdpReceiveListener;
 import okhttp3.ResponseBody;
 
 import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_RESPONSE;
@@ -185,6 +187,22 @@ public class MainActivity extends Activity implements ILoginFragmentView{
         intentFilter.addAction(FITME_SERVICE_COMMUNICATION);
         registerReceiver(mBroadcastReceiver,intentFilter);
         mContext = this;
+
+        //开启UDP服务端
+        UDPSocket.getInstance().setOnUdpReceiveListener(new UdpReceiveListener() {
+            @Override
+            public void onReceiver(byte[] bytes) {
+                //Base64解码
+                String str = new String(Base64.decode(bytes,Base64.DEFAULT));
+
+                sendBroadcast(TTS_CONTROL,TTS_START,TTS_TEXT,str);
+            }
+
+            @Override
+            public void onReceiver(String msg) {
+
+            }
+        });
 
     }
 
