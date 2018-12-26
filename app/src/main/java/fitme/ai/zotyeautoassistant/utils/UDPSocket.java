@@ -21,10 +21,10 @@ import fitme.ai.zotyeautoassistant.view.impl.UdpReceiveListener;
  */
 public class UDPSocket {
 
-    private static final int DEFAULT_PORT = 57816;//端口号57816  18001
+    private static final int DEFAULT_PORT = 18001;//端口号57816  18001
     private static final int MAX_DATA_PACKET_LENGTH = 256;
-    //private static final String HOST = "226.0.0.22";
-    private static final String HOST = "255.255.255.255";
+    private static final String HOST = "226.0.0.22";
+    //private static final String HOST = "255.255.255.255";
 
     private RecThread recThread = null;
     private SendThread sendThread = null;
@@ -51,7 +51,7 @@ public class UDPSocket {
                 mSocket = new DatagramSocket(null);
                 mSocket.setReuseAddress(true);
                 //mSocket.bind(new InetSocketAddress(InetAddress.getByName(HOST),DEFAULT_PORT));
-                mSocket.bind(new InetSocketAddress(DEFAULT_PORT));
+                mSocket.bind(new InetSocketAddress(18003));
                 //开启接收线程
                 recThread = new RecThread();
                 recThread.start();
