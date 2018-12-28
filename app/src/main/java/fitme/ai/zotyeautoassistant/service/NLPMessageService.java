@@ -41,6 +41,7 @@ import fitme.ai.zotyeautoassistant.presenter.MessageGetPresenter;
 import fitme.ai.zotyeautoassistant.presenter.SmartSceneControlPresenter;
 import fitme.ai.zotyeautoassistant.utils.ChatItemTypeConsts;
 import fitme.ai.zotyeautoassistant.utils.DictionaryGetUtils;
+import fitme.ai.zotyeautoassistant.utils.FlightControlContants;
 import fitme.ai.zotyeautoassistant.utils.IAppendAudio;
 import fitme.ai.zotyeautoassistant.utils.L;
 import fitme.ai.zotyeautoassistant.utils.PinyinDemo;
@@ -48,11 +49,13 @@ import fitme.ai.zotyeautoassistant.utils.ResultDealUtils;
 import fitme.ai.zotyeautoassistant.utils.SSRecorder;
 import fitme.ai.zotyeautoassistant.utils.SoundPlayUtils;
 import fitme.ai.zotyeautoassistant.utils.StringUtils;
+import fitme.ai.zotyeautoassistant.utils.UDPSocketCommand;
 import fitme.ai.zotyeautoassistant.utils.VolumeUtil;
 import fitme.ai.zotyeautoassistant.view.impl.IMessageManageService;
 import okhttp3.ResponseBody;
 
 import static com.iflytek.speech.libisssr.ISS_SR_MODE_LOCAL_REC;
+import static fitme.ai.zotyeautoassistant.MainActivity.byteMerger;
 import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_RESPONSE;
 import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE;
 import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_DEFAULT;
@@ -73,6 +76,8 @@ import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_START;
 import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_TEXT;
 import static fitme.ai.zotyeautoassistant.utils.Constants.WAKE_UP;
 import static fitme.ai.zotyeautoassistant.utils.Constants.WAKE_UP_STATE;
+import static fitme.ai.zotyeautoassistant.utils.FlightControlContants.FRAME_COMMAND_0;
+import static fitme.ai.zotyeautoassistant.utils.FlightControlContants.FRAME_COMMAND_1;
 
 public class NLPMessageService extends Service implements IMessageManageService,IAppendAudio {
 
@@ -652,10 +657,12 @@ public class NLPMessageService extends Service implements IMessageManageService,
         Log.i(TAG, "startRecord: 开始录音");
         SoundPlayUtils.getInstance(getApplication()).playSound(SoundPlayUtils.WAKE_UP_SOUND);
         SSRecorder.instance().start(SSRecorder.RECORDTYPE.RECORD_SR);
+        sendGreenLight();
     }
     private void stopRecord(){
         Log.i(TAG, "startRecord: 结束录音");
         SSRecorder.instance().stop(SSRecorder.RECORDTYPE.RECORD_SR);
+        sendRedLight();
     }
 
     private boolean handleSRMessage(long msg, long wParam, String lParam){
@@ -685,6 +692,7 @@ public class NLPMessageService extends Service implements IMessageManageService,
             break;
             case libisssr.ISS_SR_MSG_ResponseTimeout: {
                 Log.i(TAG, "handleSRMessage: 识别超时");
+                sendRedLight();
                 handlerVolume.removeCallbacks(taskVolume);
                 sendBroadcast(ASR_STATE,ASR_STATE_RESPONSE_TIMEOUT);
                 playingmusic(MusicPlayerService.RECOVER_MUSIC_VOLUME,"",0);     //恢复音乐音量
@@ -692,18 +700,21 @@ public class NLPMessageService extends Service implements IMessageManageService,
             break;
             case libisssr.ISS_SR_MSG_SpeechStart: {
                 Log.i(TAG, "handleSRMessage: 检测到语音开始");
+                sendGreenLight();
                 handlerVolume.post(taskVolume);
                 sendBroadcast(ASR_STATE,ASR_STATE_SPEECH_START);
             }
             break;
             case libisssr.ISS_SR_MSG_SpeechTimeOut: {
                 Log.i(TAG, "handleSRMessage: 说话超时");
+                sendRedLight();
                 sendBroadcast(ASR_STATE,ASR_STATE_SPEECH_TIMEOUT);
                 playingmusic(MusicPlayerService.RECOVER_MUSIC_VOLUME,"",0);     //恢复音乐音量
             }
             break;
             case libisssr.ISS_SR_MSG_SpeechEnd: {
                 Log.i(TAG, "handleSRMessage: 检测到语音结束");
+                sendRedLight();
                 handlerVolume.removeCallbacks(taskVolume);
                 stopRecord();
                 sendBroadcast(ASR_STATE,ASR_STATE_SPEECH_END);
@@ -711,6 +722,7 @@ public class NLPMessageService extends Service implements IMessageManageService,
             break;
             case libisssr.ISS_SR_MSG_Error: {
                 Log.i(TAG, "handleSRMessage: 识别出错");
+                sendRedLight();
                 handlerVolume.removeCallbacks(taskVolume);
                 sendBroadcast(ASR_STATE,ASR_STATE_ERROR);
                 playingmusic(MusicPlayerService.RECOVER_MUSIC_VOLUME,"",0);     //恢复音乐音量
@@ -785,6 +797,14 @@ public class NLPMessageService extends Service implements IMessageManageService,
             break;
         }
         return rtn;
+    }
+
+    private void sendGreenLight(){
+        UDPSocketCommand.getInstance().sendUdpAndWaitRes(byteMerger(byteMerger(FRAME_COMMAND_0,FRAME_COMMAND_1), FlightControlContants.LISTENNING));
+    }
+
+    private void sendRedLight(){
+        UDPSocketCommand.getInstance().sendUdpAndWaitRes(byteMerger(byteMerger(FRAME_COMMAND_0,FRAME_COMMAND_1), FlightControlContants.DISPOSING));
     }
 }
 

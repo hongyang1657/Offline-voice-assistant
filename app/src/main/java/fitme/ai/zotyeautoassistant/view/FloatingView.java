@@ -48,7 +48,7 @@ public class FloatingView extends FrameLayout{
         intentFilter.addAction(FITME_SERVICE_COMMUNICATION);
         context.registerReceiver(mBroadcastReceiver,intentFilter);
 
-        initFloatView();
+        //initFloatView();
         floatingView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

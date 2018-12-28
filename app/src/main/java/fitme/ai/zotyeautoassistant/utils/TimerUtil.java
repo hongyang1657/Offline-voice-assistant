@@ -50,8 +50,9 @@ public class TimerUtil{
         isTimering = false;
     }
 
+    //TODO 如需倒计时，改为isTimering
     public boolean getTimerState(){
-        return isTimering;
+        return true;          //TODO 如需倒计时，改为isTimering
     }
 
     public void setOnTimerEndListener(TimerEndListener listener){

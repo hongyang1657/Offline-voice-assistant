@@ -21,8 +21,11 @@ import java.util.List;
 import fitme.ai.zotyeautoassistant.MyApplication;
 import fitme.ai.zotyeautoassistant.tts.ITTSPlayListener;
 import fitme.ai.zotyeautoassistant.tts.TTSPlayer;
+import fitme.ai.zotyeautoassistant.utils.FlightControlContants;
 import fitme.ai.zotyeautoassistant.utils.L;
+import fitme.ai.zotyeautoassistant.utils.UDPSocketCommand;
 
+import static fitme.ai.zotyeautoassistant.MainActivity.byteMerger;
 import static fitme.ai.zotyeautoassistant.utils.Constants.AWAIT_WAKE_UP;
 import static fitme.ai.zotyeautoassistant.utils.Constants.FITME_SERVICE_COMMUNICATION;
 import static fitme.ai.zotyeautoassistant.utils.Constants.TAG;
@@ -36,6 +39,8 @@ import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_STOP;
 import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_TEXT;
 import static fitme.ai.zotyeautoassistant.utils.Constants.WAKE_UP;
 import static fitme.ai.zotyeautoassistant.utils.Constants.WAKE_UP_STATE;
+import static fitme.ai.zotyeautoassistant.utils.FlightControlContants.FRAME_COMMAND_0;
+import static fitme.ai.zotyeautoassistant.utils.FlightControlContants.FRAME_COMMAND_1;
 
 
 public class TtsService extends Service{
@@ -145,7 +150,7 @@ public class TtsService extends Service{
 
         @Override
         public void onProgress(int arg1, int arg2) {
-            //Log.i(TAG, "ITtsListener -> onProgress : " + arg1 + " , " + arg2);
+            Log.i(TAG, "ITtsListener -> onProgress : " + arg1 + " , " + arg2);
         }
     };
 
@@ -178,6 +183,7 @@ public class TtsService extends Service{
 
                         }else {
                             libisstts.start(mNativeHandle, tts_text);
+                            sendRedLight();
                         }
                     }
                     break;
@@ -278,5 +284,13 @@ public class TtsService extends Service{
                 }
             }
         }
+    }
+
+    private void sendGreenLight(){
+        UDPSocketCommand.getInstance().sendUdpAndWaitRes(byteMerger(byteMerger(FRAME_COMMAND_0,FRAME_COMMAND_1), FlightControlContants.LISTENNING));
+    }
+
+    private void sendRedLight(){
+        UDPSocketCommand.getInstance().sendUdpAndWaitRes(byteMerger(byteMerger(FRAME_COMMAND_0,FRAME_COMMAND_1), FlightControlContants.DISPOSING));
     }
 }

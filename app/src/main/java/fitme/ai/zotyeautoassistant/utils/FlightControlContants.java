@@ -8,6 +8,9 @@ public class FlightControlContants {
     public static final byte[] FRAME_0 = {(byte) 0xEB};
     public static final byte[] FRAME_1 = {(byte) 0x90};
 
+    public static final byte[] FRAME_COMMAND_0 = {(byte) 0xEE};
+    public static final byte[] FRAME_COMMAND_1 = {(byte) 0x16};
+
     public static final byte[] START = {(byte) 0xFF};
     public static final byte[] EXIT = {(byte) 0xEE};
     public static final byte[] ENTER_AIR_LINE = {0x31};  //装订航线
@@ -26,6 +29,10 @@ public class FlightControlContants {
     public static final byte[] PUT_LANDING_GEAR = {0x59};  //放起落架
     public static final byte[] OPEN_CONFIRMATION = {0x61};  //打开语音确认
     public static final byte[] CLOSE_CONFIRMATION = {0x63};  //关闭语音确认
+
+    public static final byte[] LISTENNING = {(byte) 0xAA};   //正在拾音
+    public static final byte[] DISPOSING = {(byte) 0xBB};   //正在处理
+
 
     public static byte[] addBytes(byte[] data1, byte[] data2) {
         byte[] data3 = new byte[data1.length + data2.length];

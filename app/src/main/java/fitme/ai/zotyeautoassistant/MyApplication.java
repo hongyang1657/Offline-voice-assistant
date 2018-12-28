@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import fitme.ai.zotyeautoassistant.utils.AMapLocationUtils;
 import fitme.ai.zotyeautoassistant.view.FloatingView;
 
 /**
@@ -34,7 +33,6 @@ public class MyApplication extends Application {
         super.onCreate();
         instance=this;
         mFloatingView = new FloatingView(this);
-        //AMapLocationUtils.getInstances(instance).initLocation();  //初始化高德定位
     }
 
     public FloatingView getmFloatingView() {
