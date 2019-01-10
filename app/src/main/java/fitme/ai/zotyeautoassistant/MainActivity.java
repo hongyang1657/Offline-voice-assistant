@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
@@ -13,63 +12,36 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import fitme.ai.zotyeautoassistant.bean.AccountCreate;
-import fitme.ai.zotyeautoassistant.bean.AccountGet;
-import fitme.ai.zotyeautoassistant.bean.CheckToken;
-import fitme.ai.zotyeautoassistant.bean.DeviceAllInfo;
-import fitme.ai.zotyeautoassistant.bean.DevicesInfo;
 import fitme.ai.zotyeautoassistant.bean.ResultBean;
-import fitme.ai.zotyeautoassistant.bean.Status;
-import fitme.ai.zotyeautoassistant.bean.TokenInfo;
-import fitme.ai.zotyeautoassistant.presenter.DeviceBindPresenter;
-import fitme.ai.zotyeautoassistant.presenter.DeviceBindSuccessPresenter;
-import fitme.ai.zotyeautoassistant.presenter.DeviceConfigPutPresenter;
-import fitme.ai.zotyeautoassistant.presenter.DeviceInfoUploadPresenter;
-import fitme.ai.zotyeautoassistant.presenter.DeviceSearchPresenter;
-import fitme.ai.zotyeautoassistant.presenter.GetUserIdByMobilePresenter;
-import fitme.ai.zotyeautoassistant.presenter.TokenPresenter;
-import fitme.ai.zotyeautoassistant.service.AsrService;
 import fitme.ai.zotyeautoassistant.service.ActivateService;
 import fitme.ai.zotyeautoassistant.service.NLPMessageService;
 import fitme.ai.zotyeautoassistant.service.TtsService;
 import fitme.ai.zotyeautoassistant.utils.Constants;
 import fitme.ai.zotyeautoassistant.utils.FlightControlContants;
 import fitme.ai.zotyeautoassistant.utils.L;
-import fitme.ai.zotyeautoassistant.utils.Mac;
-import fitme.ai.zotyeautoassistant.utils.PinyinDemo;
-import fitme.ai.zotyeautoassistant.utils.SPConstants;
-import fitme.ai.zotyeautoassistant.utils.SharedPreferencesUtils;
-import fitme.ai.zotyeautoassistant.utils.SoundPlayUtils;
 import fitme.ai.zotyeautoassistant.utils.TimerUtil;
 import fitme.ai.zotyeautoassistant.utils.UDPSocket;
 import fitme.ai.zotyeautoassistant.utils.UDPSocketCommand;
 import fitme.ai.zotyeautoassistant.utils.UDPSocketRec;
-import fitme.ai.zotyeautoassistant.view.impl.ILoginFragmentView;
 import fitme.ai.zotyeautoassistant.view.impl.TimerEndListener;
 import fitme.ai.zotyeautoassistant.view.impl.UdpReceiveListener;
-import okhttp3.ResponseBody;
 
 import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_RESPONSE;
 import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE;
 import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_DEFAULT;
 import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_ERROR;
 import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_RESPONSE_TIMEOUT;
-import static fitme.ai.zotyeautoassistant.utils.Constants.ASR_STATE_SPEECH_END;
 import static fitme.ai.zotyeautoassistant.utils.Constants.AWAIT_WAKE_UP;
 import static fitme.ai.zotyeautoassistant.utils.Constants.FITME_SERVICE_COMMUNICATION;
 import static fitme.ai.zotyeautoassistant.utils.Constants.LOG;
-import static fitme.ai.zotyeautoassistant.utils.Constants.LOGIN_STATE;
 import static fitme.ai.zotyeautoassistant.utils.Constants.LOG_LOCAL;
 import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_CONTROL;
 import static fitme.ai.zotyeautoassistant.utils.Constants.TTS_PLAY_END;
@@ -123,7 +95,6 @@ public class MainActivity extends Activity{
         tvLog.setVisibility(View.GONE);
         tvLogLocal.setVisibility(View.VISIBLE);
         initActivateService();
-        //initAsrService();
         initTtsService();
         initMessageService();
         //广播接收
@@ -213,10 +184,6 @@ public class MainActivity extends Activity{
         startService(intentActivateService);
     }
 
-    private void initAsrService(){
-        intentAsrService = new Intent(MainActivity.this, AsrService.class);
-        startService(intentAsrService);
-    }
 
     private void initTtsService(){
         intentTtsService = new Intent(MainActivity.this, TtsService.class);

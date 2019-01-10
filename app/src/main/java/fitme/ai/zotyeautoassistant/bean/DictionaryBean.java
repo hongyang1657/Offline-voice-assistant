@@ -3,6 +3,7 @@ package fitme.ai.zotyeautoassistant.bean;
 import java.util.Map;
 
 /**
+ * 词典
  * Created by zzy on 2018/7/23.
  */
 

@@ -49,10 +49,8 @@
         </activity>
 
         <service android:name=".service.ActivateService"/>
-        <service android:name=".service.AsrService"/>
         <service android:name=".service.TtsService"/>
         <service android:name=".service.NLPMessageService"/>
-        <service android:name=".service.MusicPlayerService"/>
 
         <receiver android:name=".receiver.BootBroadcastReceiver">
             <intent-filter>

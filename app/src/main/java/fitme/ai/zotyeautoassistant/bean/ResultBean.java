@@ -1,7 +1,6 @@
 package fitme.ai.zotyeautoassistant.bean;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 模型预测的结果返回bean

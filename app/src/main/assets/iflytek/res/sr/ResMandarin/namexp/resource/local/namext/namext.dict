@@ -1,0 +1,1547 @@
+a0	a4
+a1	a1
+a2	a2
+a3	a3
+a4	a4
+ai1	ay1
+ai2	ay2
+ai3	ay3
+ai4	ay4
+an1	a1 nT
+an3	a3 nT
+an4	a4 nT
+ang1	a1 ng
+ang2	a2 ng
+ang4	a4 ng
+ao1	aw1
+ao2	aw2
+ao3	aw3
+ao4	aw4
+ba0	b a4
+ba1	b a1
+ba2	b a2
+ba3	b a3
+ba4	b a4
+bai0	b ay4
+bai1	b ay1
+bai2	b ay2
+bai3	b ay3
+bai4	b ay4
+ban0	b a4 nT
+ban1	b a1 nT
+ban3	b a3 nT
+ban4	b a4 nT
+bang0	b a4 ng
+bang1	b a1 ng
+bang3	b a3 ng
+bang4	b a4 ng
+bao0	b aw4
+bao1	b aw1
+bao2	b aw2
+bao3	b aw3
+bao4	b aw4
+bei0	b ey4
+bei1	b ey1
+bei3	b ey3
+bei4	b ey4
+ben1	b e1 nT
+ben3	b e3 nT
+ben4	b e4 nT
+beng1	b e1 ng
+beng2	b e2 ng
+beng3	b e3 ng
+beng4	b e4 ng
+bi0	b i4
+bi1	b i1
+bi2	b i2
+bi3	b i3
+bi4	b i4
+bian0	b y a4 nT
+bian1	b y a1 nT
+bian3	b y a3 nT
+bian4	b y a4 nT
+biao1	b y aw1
+biao2	b y aw2
+biao3	b y aw3
+biao4	b y aw4
+bie1	b y Ie1
+bie2	b y Ie2
+bie3	b y Ie3
+bie4	b y Ie4
+bin1	b i1 nT
+bin4	b i4 nT
+bing0	b i4 ng
+bing1	b i1 ng
+bing3	b i3 ng
+bing4	b i4 ng
+bo0	b o4
+bo1	b o1
+bo2	b o2
+bo3	b o3
+bo4	b o4
+bu0	b u4
+bu1	b u1
+bu2	b u2
+bu3	b u3
+bu4	b u4
+ca1	c a1
+ca3	c a3
+cai0	c ay4
+cai1	c ay1
+cai2	c ay2
+cai3	c ay3
+cai4	c ay4
+can1	c a1 nT
+can2	c a2 nT
+can3	c a3 nT
+can4	c a4 nT
+cang1	c a1 ng
+cang2	c a2 ng
+cao1	c aw1
+cao2	c aw2
+cao3	c aw3
+ce4	c e4
+cen1	c e1 nT
+cen2	c e2 nT
+ceng0	c e4 ng
+ceng1	c e1 ng
+ceng2	c e2 ng
+ceng4	c e4 ng
+cha0	ch a4
+cha1	ch a1
+cha2	ch a2
+cha3	ch a3
+cha4	ch a4
+chai1	ch ay1
+chai2	ch ay2
+chai4	ch ay4
+chan0	ch a4 nT
+chan1	ch a1 nT
+chan2	ch a2 nT
+chan3	ch a3 nT
+chan4	ch a4 nT
+chang0	ch a4 ng
+chang1	ch a1 ng
+chang2	ch a2 ng
+chang3	ch a3 ng
+chang4	ch a4 ng
+chao0	ch aw4
+chao1	ch aw1
+chao2	ch aw2
+chao3	ch aw3
+chao4	ch aw4
+che0	ch e4
+che1	ch e1
+che3	ch e3
+che4	ch e4
+chen0	ch e4 nT
+chen1	ch e1 nT
+chen2	ch e2 nT
+chen3	ch e3 nT
+chen4	ch e4 nT
+cheng0	ch e4 ng
+cheng1	ch e1 ng
+cheng2	ch e2 ng
+cheng3	ch e3 ng
+cheng4	ch e4 ng
+chi0	ch IH4
+chi1	ch IH1
+chi2	ch IH2
+chi3	ch IH3
+chi4	ch IH4
+chong1	ch o1 ng
+chong2	ch o2 ng
+chong3	ch o3 ng
+chong4	ch o4 ng
+chou0	ch ow4
+chou1	ch ow1
+chou2	ch ow2
+chou3	ch ow3
+chou4	ch ow4
+chu0	ch u4
+chu1	ch u1
+chu2	ch u2
+chu3	ch u3
+chu4	ch u4
+chuai1	ch w ay1
+chuai2	ch w ay2
+chuai3	ch w ay3
+chuai4	ch w ay4
+chuan1	ch w a1 nT
+chuan2	ch w a2 nT
+chuan3	ch w a3 nT
+chuan4	ch w a4 nT
+chuang1	ch w a1 ng
+chuang2	ch w a2 ng
+chuang3	ch w a3 ng
+chuang4	ch w a4 ng
+chui0	ch w ey1
+chui1	ch w ey1
+chui2	ch w ey2
+chun1	ch w e1 nT
+chun2	ch w e2 nT
+chun3	ch w e3 nT
+chuo0	ch w o4
+chuo1	ch w o1
+chuo4	ch w o4
+ci1	c I1
+ci2	c I2
+ci3	c I3
+ci4	c I4
+cong1	c o1 ng
+cong2	c o2 ng
+cou4	c ow4
+cu1	c u1
+cu2	c u2
+cu4	c u4
+cuan1	c w a1 nT
+cuan2	c w a2 nT
+cuan4	c w a4 nT
+cui1	c w ey1
+cui3	c w ey3
+cui4	c w ey4
+cun0	c w e4 nT
+cun1	c w e1 nT
+cun2	c w e2 nT
+cun3	c w e3 nT
+cun4	c w e4 nT
+cuo1	c w o1
+cuo2	c w o2
+cuo3	c w o3
+cuo4	c w o4
+da0	d a4
+da1	d a1
+da2	d a2
+da3	d a3
+da4	d a4
+dai0	d ay4
+dai1	d ay1
+dai3	d ay3
+dai4	d ay4
+dan0	d a4 nT
+dan1	d a1 nT
+dan3	d a3 nT
+dan4	d a4 nT
+dang0	d a4 ng
+dang1	d a1 ng
+dang3	d a3 ng
+dang4	d a4 ng
+dao0	d aw4
+dao1	d aw1
+dao2	d aw2
+dao3	d aw3
+dao4	d aw4
+de0	d e4
+de1	d e1
+de2	d e2
+de4	d e4
+dei3	d ey3
+den4	d e4 nT
+deng1	d e1 ng
+deng3	d e3 ng
+deng4	d e4 ng
+di0	d i4
+di1	d i1
+di2	d i2
+di3	d i3
+di4	d i4
+dia3	d y a3
+dian0	d y a4 nT
+dian1	d y a1 nT
+dian3	d y a3 nT
+dian4	d y a4 nT
+diao0	d y aw4
+diao1	d y aw1
+diao3	d y aw3
+diao4	d y aw4
+die0	d y Ie1
+die4	d y Ie1
+die1	d y Ie1
+die2	d y Ie2
+ding0	d i4 ng
+ding1	d i1 ng
+ding3	d i3 ng
+ding4	d i4 ng
+diu1	d y ow1
+dong1	d o1 ng
+dong3	d o3 ng
+dong4	d o4 ng
+dou0	d ow4
+dou1	d ow1
+dou3	d ow3
+dou4	d ow4
+du0	d u4
+du1	d u1
+du2	d u2
+du3	d u3
+du4	d u4
+duan1	d w a1 nT
+duan3	d w a3 nT
+duan4	d w a4 nT
+dui1	d w ey1
+dui4	d w ey4
+dun0	d w e4 nT
+dun1	d w e1 nT
+dun3	d w e3 nT
+dun4	d w e4 nT
+duo0	d w o4
+duo1	d w o1
+duo2	d w o2
+duo3	d w o3
+duo4	d w o4
+e0	e4
+e1	e1
+e2	e2
+e3	e3
+e4	e4
+ei1	ey1
+ei2	ey2
+ei3	ey3
+ei4	ey4
+en1	e1 nT
+en3	e3 nT
+en4	e4 nT
+eng0	e4 ng
+eng1	e1 ng
+eng2	e2 ng
+eng3	e3 ng
+eng4	e4 ng
+er0	er4
+er2	er2
+er3	er3
+er4	er4
+fa0	f a4
+fa1	f a1
+fa2	f a2
+fa3	f a3
+fa4	f a4
+fan0	f a4 nT
+fan1	f a1 nT
+fan2	f a2 nT
+fan3	f a3 nT
+fan4	f a4 nT
+fang0	f a4 ng
+fang1	f a1 ng
+fang2	f a2 ng
+fang3	f a3 ng
+fang4	f a4 ng
+fei0	f ey4
+fei1	f ey1
+fei2	f ey2
+fei3	f ey3
+fei4	f ey4
+fen0	f e4 nT
+fen1	f e1 nT
+fen2	f e2 nT
+fen3	f e3 nT
+fen4	f e4 nT
+feng0	f e4 ng
+feng1	f e1 ng
+feng2	f e2 ng
+feng3	f e3 ng
+feng4	f e4 ng
+fo2	f o2
+fou3	f ow3
+fu0	f u4
+fu1	f u1
+fu2	f u2
+fu3	f u3
+fu4	f u4
+ga0	g a4
+ga1	g a1
+ga2	g a2
+ga3	g a3
+ga4	g a4
+gai0	g ay4
+gai1	g ay1
+gai3	g ay3
+gai4	g ay4
+gan0	g a4 nT
+gan1	g a1 nT
+gan3	g a3 nT
+gan4	g a4 nT
+gang1	g a1 ng
+gang3	g a3 ng
+gang4	g a4 ng
+gao1	g aw1
+gao3	g aw3
+gao4	g aw4
+ge0	g e4
+ge1	g e1
+ge2	g e2
+ge3	g e3
+ge4	g e4
+gei3	g ey3
+gen1	g e1 nT
+gen2	g e2 nT
+gen3	g e3 nT
+gen4	g e4 nT
+geng1	g e1 ng
+geng3	g e3 ng
+geng4	g e4 ng
+gong0	g o4 ng
+gong1	g o1 ng
+gong3	g o3 ng
+gong4	g o4 ng
+gou1	g ow1
+gou3	g ow3
+gou4	g ow4
+gu0	g u4
+gu1	g u1
+gu2	g u2
+gu3	g u3
+gu4	g u4
+gua0	g w a4
+gua1	g w a1
+gua3	g w a3
+gua4	g w a4
+guai1	g w ay1
+guai3	g w ay3
+guai4	g w ay4
+guan1	g w a1 nT
+guan2	g w a2 nT
+guan3	g w a3 nT
+guan4	g w a4 nT
+guang0	g w a4 ng
+guang1	g w a1 ng
+guang3	g w a3 ng
+guang4	g w a4 ng
+gui0	g w ey4
+gui1	g w ey1
+gui3	g w ey3
+gui4	g w ey4
+gun3	g w e3 nT
+gun4	g w e4 nT
+guo0	g w o4
+guo1	g w o1
+guo2	g w o2
+guo3	g w o3
+guo4	g w o4
+ha0	h a4
+ha1	h a1
+ha2	h a2
+ha3	h a3
+ha4	h a4
+hai0	h ay4
+hai1	h ay1
+hai2	h ay2
+hai3	h ay3
+hai4	h ay4
+han0	h a4 nT
+han1	h a1 nT
+han2	h a2 nT
+han3	h a3 nT
+han4	h a4 nT
+hang1	h a1 ng
+hang2	h a2 ng
+hang4	h a4 ng
+hao0	h aw4
+hao1	h aw1
+hao2	h aw2
+hao3	h aw3
+hao4	h aw4
+he0	h e4
+he1	h e1
+he2	h e2
+he4	h e4
+hei0	h ey1
+hei1	h ey1
+hen2	h e2 nT
+hen3	h e3 nT
+hen4	h e4 nT
+heng0	h e4 ng
+heng1	h e1 ng
+heng2	h e2 ng
+heng4	h e4 ng
+hong1	h o1 ng
+hong2	h o2 ng
+hong3	h o3 ng
+hong4	h o4 ng
+hou0	h ow4
+hou1	h ow1
+hou2	h ow2
+hou3	h ow3
+hou4	h ow4
+hu0	h u4
+hu1	h u1
+hu2	h u2
+hu3	h u3
+hu4	h u4
+hua0	h w a4
+hua1	h w a1
+hua2	h w a2
+hua4	h w a4
+huai0	h w ay4
+huai2	h w ay2
+huai4	h w ay4
+huan0	h w a4 nT
+huan1	h w a1 nT
+huan2	h w a2 nT
+huan3	h w a3 nT
+huan4	h w a4 nT
+huang0	h w a4 ng
+huang1	h w a1 ng
+huang2	h w a2 ng
+huang3	h w a3 ng
+huang4	h w a4 ng
+hui0	h w ey4
+hui1	h w ey1
+hui2	h w ey2
+hui3	h w ey3
+hui4	h w ey4
+hun0	h w e4 nT
+hun1	h w e1 nT
+hun2	h w e2 nT
+hun3	h w e3 nT
+hun4	h w e4 nT
+huo0	h w o4
+huo1	h w o1
+huo2	h w o2
+huo3	h w o3
+huo4	h w o4
+ji0	j i4
+ji1	j i1
+ji2	j i2
+ji3	j i3
+ji4	j i4
+jia0	j y a4
+jia1	j y a1
+jia2	j y a2
+jia3	j y a3
+jia4	j y a4
+jian0	j y a4 nT
+jian1	j y a1 nT
+jian2	j y a2 nT
+jian3	j y a3 nT
+jian4	j y a4 nT
+jiang0	j y a4 ng
+jiang1	j y a1 ng
+jiang3	j y a3 ng
+jiang4	j y a4 ng
+jiao0	j y aw4
+jiao1	j y aw1
+jiao2	j y aw2
+jiao3	j y aw3
+jiao4	j y aw4
+jie0	j y Ie4
+jie1	j y Ie1
+jie2	j y Ie2
+jie3	j y Ie3
+jie4	j y Ie4
+jin0	j i4 nT
+jin1	j i1 nT
+jin3	j i3 nT
+jin4	j i4 nT
+jing0	j i4 ng
+jing1	j i1 ng
+jing2	j i2 ng
+jing3	j i3 ng
+jing4	j i4 ng
+jiong1	j v o1 ng
+jiong3	j v o3 ng
+jiu0	j y ow4
+jiu1	j y ow1
+jiu2	j y ow2
+jiu3	j y ow3
+jiu4	j y ow4
+ju0	j yv4
+ju1	j yv1
+ju2	j yv2
+ju3	j yv3
+ju4	j yv4
+juan1	j v a1 nT
+juan3	j v a3 nT
+juan4	j v a4 nT
+jue1	j v Ie1
+jue2	j v Ie2
+jue3	j v Ie3
+jue4	j v Ie4
+jun1	j yv1 nT
+jun4	j yv4 nT
+ka1	k a1
+ka2	k a2
+ka3	k a3
+kai1	k ay1
+kai3	k ay3
+kai4	k ay4
+kan0	k a4 nT
+kan1	k a1 nT
+kan3	k a3 nT
+kan4	k a4 nT
+kang1	k a1 ng
+kang2	k a2 ng
+kang4	k a4 ng
+kao0	k aw4
+kao1	k aw1
+kao3	k aw3
+kao4	k aw4
+ke0	k e4
+ke1	k e1
+ke2	k e2
+ke3	k e3
+ke4	k e4
+kei1	k ey1
+ken3	k e3 nT
+ken4	k e4 nT
+keng0	k e4 ng
+keng1	k e1 ng
+keng4	k e4 ng
+kong0	k o4 ng
+kong1	k o1 ng
+kong3	k o3 ng
+kong4	k o4 ng
+kou0	k ow4
+kou1	k ow1
+kou3	k ow3
+kou4	k ow4
+ku0	k u4
+ku1	k u1
+ku3	k u3
+ku4	k u4
+kua1	k w a1
+kua3	k w a3
+kua4	k w a4
+kuai0	k w ay4
+kuai3	k w ay3
+kuai4	k w ay4
+kuan1	k w a1 nT
+kuan3	k w a3 nT
+kuang0	k w a4 ng
+kuang1	k w a1 ng
+kuang2	k w a2 ng
+kuang3	k w a3 ng
+kuang4	k w a4 ng
+kui1	k w ey1
+kui2	k w ey2
+kui3	k w ey3
+kui4	k w ey4
+kun1	k w e1 nT
+kun3	k w e3 nT
+kun4	k w e4 nT
+kuo4	k w o4
+la0	l a4
+la1	l a1
+la2	l a2
+la3	l a3
+la4	l a4
+lai0	l ay4
+lai2	l ay2
+lai4	l ay4
+lan0	l a4 nT
+lan2	l a2 nT
+lan3	l a3 nT
+lan4	l a4 nT
+lang0	l a4 ng
+lang1	l a1 ng
+lang2	l a2 ng
+lang3	l a3 ng
+lang4	l a4 ng
+lao0	l aw4
+lao1	l aw1
+lao2	l aw2
+lao3	l aw3
+lao4	l aw4
+le0	l e4
+le1	l e1
+le4	l e4
+lei0	l ey4
+lei1	l ey1
+lei2	l ey2
+lei3	l ey3
+lei4	l ey4
+leng0	l e4 ng
+leng1	l e1 ng
+leng2	l e2 ng
+leng3	l e3 ng
+leng4	l e4 ng
+li0	l i4
+li1	l i1
+li2	l i2
+li3	l i3
+li4	l i4
+lia3	l y a3
+lian0	l y a4 nT
+lian2	l y a2 nT
+lian3	l y a3 nT
+lian4	l y a4 nT
+liang0	l y a4 ng
+liang2	l y a2 ng
+liang3	l y a3 ng
+liang4	l y a4 ng
+liao0	l y aw4
+liao1	l y aw1
+liao2	l y aw2
+liao3	l y aw3
+liao4	l y aw4
+lie0	l y Ie4
+lie1	l y Ie1
+lie2	l y Ie2
+lie3	l y Ie3
+lie4	l y Ie4
+lin1	l i1 nT
+lin2	l i2 nT
+lin3	l i3 nT
+lin4	l i4 nT
+ling0	l i4 ng
+ling1	l i1 ng
+ling2	l i2 ng
+ling3	l i3 ng
+ling4	l i4 ng
+liu0	l y ow4
+liu1	l y ow1
+liu2	l y ow2
+liu3	l y ow3
+liu4	l y ow4
+lo0	l o4
+lo1	l o1
+lo4	l o4
+long0	l o4 ng
+long1	l o1 ng
+long2	l o2 ng
+long3	l o3 ng
+long4	l o4 ng
+lou0	l ow4
+lou1	l ow1
+lou2	l ow2
+lou3	l ow3
+lou4	l ow4
+lu0	l u4
+lu1	l u1
+lu2	l u2
+lu3	l u3
+lu4	l u4
+luan0	l w a4 nT
+luan2	l w a2 nT
+luan3	l w a3 nT
+luan4	l w a4 nT
+lue3	l v Ie3
+lue4	l v Ie4
+lun1	l w e1 nT
+lun2	l w e2 nT
+lun4	l w e4 nT
+luo0	l w o4
+luo1	l w o1
+luo2	l w o2
+luo3	l w o3
+luo4	l w o4
+lv2	l yv2
+lv3	l yv3
+lv4	l yv4
+ma0	m a4
+ma1	m a1
+ma2	m a2
+ma3	m a3
+ma4	m a4
+mai0	m ay4
+mai2	m ay2
+mai3	m ay3
+mai4	m ay4
+man0	m a4 nT
+man1	m a1 nT
+man2	m a2 nT
+man3	m a3 nT
+man4	m a4 nT
+mang2	m a2 ng
+mang3	m a3 ng
+mao0	m aw4
+mao1	m aw1
+mao2	m aw2
+mao3	m aw3
+mao4	m aw4
+me0	m e4
+me4	m e4
+mei0	m ey4
+mei2	m ey2
+mei3	m ey3
+mei4	m ey4
+men0	m e4 nT
+men1	m e1 nT
+men2	m e2 nT
+men4	m e4 nT
+meng1	m e1 ng
+meng2	m e2 ng
+meng3	m e3 ng
+meng4	m e4 ng
+mi0	m i4
+mi1	m i1
+mi2	m i2
+mi3	m i3
+mi4	m i4
+mian0	m y a4 nT
+mian2	m y a2 nT
+mian3	m y a3 nT
+mian4	m y a4 nT
+miao1	m y aw1
+miao2	m y aw2
+miao3	m y aw3
+miao4	m y aw4
+mie1	m y Ie1
+mie4	m y Ie4
+min2	m i2 nT
+min3	m i3 nT
+ming0	m i4 ng
+ming2	m i2 ng
+ming3	m i3 ng
+ming4	m i4 ng
+miu4	m y ow4
+mo0	m o4
+mo1	m o1
+mo2	m o2
+mo3	m o3
+mo4	m o4
+mou0	m ow1
+mou1	m ow1
+mou2	m ow2
+mou3	m ow3
+mu0	m u4
+mu2	m u2
+mu3	m u3
+mu4	m u4
+na0	nH a4
+na1	nH a1
+na2	nH a2
+na3	nH a3
+na4	nH a4
+nai0	nH ay4
+nai3	nH ay3
+nai4	nH ay4
+nan0	nH a4 nT
+nan1	nH a1 nT
+nan2	nH a2 nT
+nan3	nH a3 nT
+nan4	nH a4 nT
+nang0	nH a4 ng
+nang1	nH a1 ng
+nang2	nH a2 ng
+nang3	nH a3 ng
+nang4	nH a4 ng
+nao0	nH aw4
+nao1	nH aw1
+nao2	nH aw2
+nao3	nH aw3
+nao4	nH aw4
+ne0	nH e4
+ne1	nH e1
+ne2	nH e2
+ne4	nH e4
+nei3	nH ey3
+nei4	nH ey4
+nen4	nH e4 nT
+neng2	nH e2 ng
+ni1	nH i1
+ni2	nH i2
+ni3	nH i3
+ni4	nH i4
+nian1	nH y a1 nT
+nian2	nH y a2 nT
+nian3	nH y a3 nT
+nian4	nH y a4 nT
+niang0	nH y a4 ng
+niang2	nH y a2 ng
+niang4	nH y a4 ng
+niao3	nH y aw3
+niao4	nH y aw4
+nie1	nH y Ie1
+nie2	nH y Ie2
+nie4	nH y Ie4
+nin2	nH i2 nT
+ning2	nH i2 ng
+ning3	nH i3 ng
+ning4	nH i4 ng
+niu0	nH y ow4
+niu1	nH y ow1
+niu2	nH y ow2
+niu3	nH y ow3
+niu4	nH y ow4
+nong0	nH o4 ng
+nong2	nH o2 ng
+nong4	nH o4 ng
+nou4	nH ow4
+nu2	nH u2
+nu3	nH u3
+nu4	nH u4
+nuan3	nH w a3 nT
+nue4	nH v Ie4
+nuo2	nH w o2
+nuo4	nH w o4
+nv0	nH yv4
+nv3	nH yv3
+nv4	nH yv4
+o0	o4
+o1	o1
+o2	o2
+o3	o3
+o4	o4
+ou1	ow1
+ou3	ow3
+ou4	ow4
+pa0	p a4
+pa1	p a1
+pa2	p a2
+pa4	p a4
+pai0	p ay4
+pai1	p ay1
+pai2	p ay2
+pai3	p ay3
+pai4	p ay4
+pan0	p a4 nT
+pan1	p a1 nT
+pan2	p a2 nT
+pan4	p a4 nT
+pang1	p a1 ng
+pang2	p a2 ng
+pang3	p a3 ng
+pang4	p a4 ng
+pao1	p aw1
+pao2	p aw2
+pao3	p aw3
+pao4	p aw4
+pei1	p ey1
+pei2	p ey2
+pei4	p ey4
+pen1	p e1 nT
+pen2	p e2 nT
+pen4	p e4 nT
+peng0	p e4 ng
+peng1	p e1 ng
+peng2	p e2 ng
+peng3	p e3 ng
+peng4	p e4 ng
+pi0	p i4
+pi1	p i1
+pi2	p i2
+pi3	p i3
+pi4	p i4
+pian1	p y a1 nT
+pian2	p y a2 nT
+pian3	p y a3 nT
+pian4	p y a4 nT
+piao0	p y aw4
+piao1	p y aw1
+piao2	p y aw2
+piao3	p y aw3
+piao4	p y aw4
+pie1	p y Ie1
+pie3	p y Ie3
+pie4	p y Ie4
+pin1	p i1 nT
+pin2	p i2 nT
+pin3	p i3 nT
+pin4	p i4 nT
+ping0	p i1 ng
+ping4	p i1 ng
+ping1	p i1 ng
+ping2	p i2 ng
+po0	p o4
+po1	p o1
+po2	p o2
+po3	p o3
+po4	p o4
+pou1	p ow1
+pou2	p ow2
+pou3	p ow3
+pu0	p u4
+pu1	p u1
+pu2	p u2
+pu3	p u3
+pu4	p u4
+qi0	q i4
+qi1	q i1
+qi2	q i2
+qi3	q i3
+qi4	q i4
+qia1	q y a1
+qia2	q y a2
+qia3	q y a3
+qia4	q y a4
+qian0	q y a4 nT
+qian1	q y a1 nT
+qian2	q y a2 nT
+qian3	q y a3 nT
+qian4	q y a4 nT
+qiang0	q y a4 ng
+qiang1	q y a1 ng
+qiang2	q y a2 ng
+qiang3	q y a3 ng
+qiang4	q y a4 ng
+qiao0	q y aw4
+qiao1	q y aw1
+qiao2	q y aw2
+qiao3	q y aw3
+qiao4	q y aw4
+qie1	q y Ie1
+qie2	q y Ie2
+qie3	q y Ie3
+qie4	q y Ie4
+qin0	q i4 nT
+qin1	q i1 nT
+qin2	q i2 nT
+qin3	q i3 nT
+qin4	q i4 nT
+qing0	q i4 ng
+qing1	q i1 ng
+qing2	q i2 ng
+qing3	q i3 ng
+qing4	q i4 ng
+qiong2	q v o2 ng
+qiu0	q y ow4
+qiu1	q y ow1
+qiu2	q y ow2
+qiu3	q y ow3
+qiu4	q y ow4
+qu0	q yv4
+qu1	q yv1
+qu2	q yv2
+qu3	q yv3
+qu4	q yv4
+quan1	q v a1 nT
+quan2	q v a2 nT
+quan3	q v a3 nT
+quan4	q v a4 nT
+que1	q v Ie1
+que2	q v Ie2
+que4	q v Ie4
+qun1	q yv1 nT
+qun2	q yv2 nT
+ran0	r a2 nT
+ran2	r a2 nT
+ran3	r a3 nT
+rang0	r a4 ng
+rang1	r a1 ng
+rang2	r a2 ng
+rang3	r a3 ng
+rang4	r a4 ng
+rao2	r aw2
+rao3	r aw3
+rao4	r aw4
+re0	r e4
+re3	r e3
+re4	r e4
+ren0	r e4 nT
+ren2	r e2 nT
+ren3	r e3 nT
+ren4	r e4 nT
+reng1	r e1 ng
+reng2	r e2 ng
+ri4	r IH4
+rong2	r o2 ng
+rong3	r o3 ng
+rou2	r ow2
+rou4	r ow4
+ru2	r u2
+ru3	r u3
+ru4	r u4
+rua2	r w a2
+ruan2	r w a2 nT
+ruan3	r w a3 nT
+rui2	r w ey2
+rui3	r w ey3
+rui4	r w ey4
+run4	r w e4 nT
+ruo2	r w o2
+ruo4	r w o4
+sa0	s a4
+sa1	s a1
+sa3	s a3
+sa4	s a4
+sai1	s ay1
+sai4	s ay4
+san0	s a4 nT
+san1	s a1 nT
+san3	s a3 nT
+san4	s a4 nT
+sang1	s a1 ng
+sang3	s a3 ng
+sang4	s a4 ng
+sao0	s aw4
+sao1	s aw1
+sao3	s aw3
+sao4	s aw4
+se0	s e4
+se4	s e4
+sen1	s e1 nT
+seng1	s e1 ng
+sha1	sh a1
+sha2	sh a2
+sha3	sh a3
+sha4	sh a4
+shai1	sh ay1
+shai3	sh ay3
+shai4	sh ay4
+shan0	sh a4 nT
+shan1	sh a1 nT
+shan3	sh a3 nT
+shan4	sh a4 nT
+shang0	sh a4 ng
+shang1	sh a1 ng
+shang3	sh a3 ng
+shang4	sh a4 ng
+shao0	sh aw4
+shao1	sh aw1
+shao2	sh aw2
+shao3	sh aw3
+shao4	sh aw4
+she0	sh e4
+she1	sh e1
+she2	sh e2
+she3	sh e3
+she4	sh e4
+shei2	sh ey2
+shen0	sh e4 nT
+shen1	sh e1 nT
+shen2	sh e2 nT
+shen3	sh e3 nT
+shen4	sh e4 nT
+sheng0	sh e4 ng
+sheng1	sh e1 ng
+sheng2	sh e2 ng
+sheng3	sh e3 ng
+sheng4	sh e4 ng
+shi0	sh IH4
+shi1	sh IH1
+shi2	sh IH2
+shi3	sh IH3
+shi4	sh IH4
+shou0	sh ow4
+shou1	sh ow1
+shou2	sh ow2
+shou3	sh ow3
+shou4	sh ow4
+shu0	sh u4
+shu1	sh u1
+shu2	sh u2
+shu3	sh u3
+shu4	sh u4
+shua1	sh w a1
+shua3	sh w a3
+shua4	sh w a4
+shuai1	sh w ay1
+shuai3	sh w ay3
+shuai4	sh w ay4
+shuan1	sh w a1 nT
+shuan4	sh w a4 nT
+shuang1	sh w a1 ng
+shuang3	sh w a3 ng
+shui0	sh w ey4
+shui2	sh w ey2
+shui3	sh w ey3
+shui4	sh w ey4
+shun0	sh w e4 nT
+shun3	sh w e3 nT
+shun4	sh w e4 nT
+shuo1	sh w o1
+shuo4	sh w o4
+si0	s I4
+si1	s I1
+si3	s I3
+si4	s I4
+song1	s o1 ng
+song3	s o3 ng
+song4	s o4 ng
+sou0	s ow4
+sou1	s ow1
+sou3	s ow3
+sou4	s ow4
+su0	s u4
+su1	s u1
+su2	s u2
+su4	s u4
+suan0	s w a4 nT
+suan1	s w a1 nT
+suan4	s w a4 nT
+sui1	s w ey1
+sui2	s w ey2
+sui3	s w ey3
+sui4	s w ey4
+sun1	s w e1 nT
+sun3	s w e3 nT
+suo0	s w o4
+suo2	s w o2
+suo1	s w o1
+suo3	s w o3
+ta0	t a4
+ta1	t a1
+ta3	t a3
+ta4	t a4
+tai0	t ay4
+tai1	t ay1
+tai2	t ay2
+tai3	t ay3
+tai4	t ay4
+tan0	t a4 nT
+tan1	t a1 nT
+tan2	t a2 nT
+tan3	t a3 nT
+tan4	t a4 nT
+tang0	t a4 ng
+tang1	t a1 ng
+tang2	t a2 ng
+tang3	t a3 ng
+tang4	t a4 ng
+tao0	t aw4
+tao1	t aw1
+tao2	t aw2
+tao3	t aw3
+tao4	t aw4
+te4	t e4
+tei1	t ey1
+teng0	t e1 ng
+teng4	t e1 ng
+teng1	t e1 ng
+teng2	t e2 ng
+ti0	t i4
+ti1	t i1
+ti2	t i2
+ti3	t i3
+ti4	t i4
+tian1	t y a1 nT
+tian2	t y a2 nT
+tian3	t y a3 nT
+tian4	t y a4 nT
+tiao0	t y aw4
+tiao1	t y aw1
+tiao2	t y aw2
+tiao3	t y aw3
+tiao4	t y aw4
+tie1	t y Ie1
+tie3	t y Ie3
+tie4	t y Ie4
+ting0	t i4 ng
+ting1	t i1 ng
+ting2	t i2 ng
+ting3	t i3 ng
+ting4	t i4 ng
+tong0	t o4 ng
+tong1	t o1 ng
+tong2	t o2 ng
+tong3	t o3 ng
+tong4	t o4 ng
+tou0	t ow4
+tou1	t ow1
+tou2	t ow2
+tou3	t ow3
+tou4	t ow4
+tu0	t u4
+tu1	t u1
+tu2	t u2
+tu3	t u3
+tu4	t u4
+tuan1	t w a1 nT
+tuan2	t w a2 nT
+tuan3	t w a3 nT
+tuan4	t w a4 nT
+tui1	t w ey1
+tui2	t w ey2
+tui3	t w ey3
+tui4	t w ey4
+tun0	t w e4 nT
+tun1	t w e1 nT
+tun2	t w e2 nT
+tun3	t w e3 nT
+tun4	t w e4 nT
+tuo0	t w o4
+tuo1	t w o1
+tuo2	t w o2
+tuo3	t w o3
+tuo4	t w o4
+wa0	w a4
+wa1	w a1
+wa2	w a2
+wa3	w a3
+wa4	w a4
+wai1	w ay1
+wai3	w ay3
+wai4	w ay4
+wan0	w a4 nT
+wan1	w a1 nT
+wan2	w a2 nT
+wan3	w a3 nT
+wan4	w a4 nT
+wang0	w a4 ng
+wang1	w a1 ng
+wang2	w a2 ng
+wang3	w a3 ng
+wang4	w a4 ng
+wei0	w ey4
+wei1	w ey1
+wei2	w ey2
+wei3	w ey3
+wei4	w ey4
+wen0	w e4 nT
+wen1	w e1 nT
+wen2	w e2 nT
+wen3	w e3 nT
+wen4	w e4 nT
+weng1	w e1 ng
+weng3	w e1 ng
+wo0	w o4
+wo1	w o1
+wo3	w o3
+wo4	w o4
+wu0	u4
+wu1	u1
+wu2	u2
+wu3	u3
+wu4	u4
+xi0	x i4
+xi1	x i1
+xi2	x i2
+xi3	x i3
+xi4	x i4
+xia0	x y a4
+xia1	x y a1
+xia2	x y a2
+xia4	x y a4
+xian0	x y a4 nT
+xian1	x y a1 nT
+xian2	x y a2 nT
+xian3	x y a3 nT
+xian4	x y a4 nT
+xiang0	x y a4 ng
+xiang1	x y a1 ng
+xiang2	x y a2 ng
+xiang3	x y a3 ng
+xiang4	x y a4 ng
+xiao1	x y aw1
+xiao2	x y aw2
+xiao3	x y aw3
+xiao4	x y aw4
+xie0	x y Ie4
+xie1	x y Ie1
+xie2	x y Ie2
+xie3	x y Ie3
+xie4	x y Ie4
+xin0	x i4 nT
+xin1	x i1 nT
+xin2	x i2 nT
+xin4	x i4 nT
+xing0	x i4 ng
+xing1	x i1 ng
+xing2	x i2 ng
+xing3	x i3 ng
+xing4	x i4 ng
+xiong0	x v o4 ng
+xiong1	x v o1 ng
+xiong2	x v o2 ng
+xiong4	x v o4 ng
+xiu0	x y ow4
+xiu1	x y ow1
+xiu3	x y ow3
+xiu4	x y ow4
+xu0	x yv4
+xu1	x yv1
+xu2	x yv2
+xu3	x yv3
+xu4	x yv4
+xuan1	x v a1 nT
+xuan2	x v a2 nT
+xuan3	x v a3 nT
+xuan4	x v a4 nT
+xue1	x v Ie1
+xue2	x v Ie2
+xue3	x v Ie3
+xue4	x v Ie4
+xun0	x yv4 nT
+xun1	x yv1 nT
+xun2	x yv2 nT
+xun4	x yv4 nT
+ya0	y a4
+ya1	y a1
+ya2	y a2
+ya3	y a3
+ya4	y a4
+yan0	y a4 nT
+yan1	y a1 nT
+yan2	y a2 nT
+yan3	y a3 nT
+yan4	y a4 nT
+yang0	y a4 ng
+yang1	y a1 ng
+yang2	y a2 ng
+yang3	y a3 ng
+yang4	y a4 ng
+yao0	y aw4
+yao1	y aw1
+yao2	y aw2
+yao3	y aw3
+yao4	y aw4
+ye0	y Ie4
+ye1	y Ie1
+ye2	y Ie2
+ye3	y Ie3
+ye4	y Ie4
+yi0	i4
+yi1	i1
+yi2	i2
+yi3	i3
+yi4	i4
+yin0	i4 nT
+yin1	i1 nT
+yin2	i2 nT
+yin3	i3 nT
+yin4	i4 nT
+ying0	i4 ng
+ying1	i1 ng
+ying2	i2 ng
+ying3	i3 ng
+ying4	i4 ng
+yo0	y ow1
+yo1	y ow1
+yo4	y ow1
+yong0	v o4 ng
+yong1	v o1 ng
+yong2	v o2 ng
+yong3	v o3 ng
+yong4	v o4 ng
+you0	y ow4
+you1	y ow1
+you2	y ow2
+you3	y ow3
+you4	y ow4
+yu0	yv4
+yu1	yv1
+yu2	yv2
+yu3	yv3
+yu4	yv4
+yuan0	v a4 nT
+yuan1	v a1 nT
+yuan2	v a2 nT
+yuan3	v a3 nT
+yuan4	v a4 nT
+yue1	v Ie1
+yue3	v Ie3
+yue4	v Ie4
+yun1	yv1 nT
+yun2	yv2 nT
+yun3	yv3 nT
+yun4	yv4 nT
+za0	z a1
+za1	z a1
+za2	z a2
+za3	z a3
+zai0	z ay4
+zai1	z ay1
+zai3	z ay3
+zai4	z ay4
+zan1	z a1 nT
+zan2	z a2 nT
+zan3	z a3 nT
+zan4	z a4 nT
+zang0	z a4 ng
+zang1	z a1 ng
+zang3	z a3 ng
+zang4	z a4 ng
+zao0	z aw4
+zao1	z aw1
+zao2	z aw2
+zao3	z aw3
+zao4	z aw4
+ze2	z e2
+ze3	z e3
+ze4	z e4
+zei2	z ey2
+zen3	z e3 nT
+zen4	z e4 nT
+zeng1	z e1 ng
+zeng4	z e4 ng
+zha0	zh a4
+zha1	zh a1
+zha2	zh a2
+zha3	zh a3
+zha4	zh a4
+zhai1	zh ay1
+zhai2	zh ay2
+zhai3	zh ay3
+zhai4	zh ay4
+zhan1	zh a1 nT
+zhan3	zh a3 nT
+zhan4	zh a4 nT
+zhang0	zh a4 ng
+zhang1	zh a1 ng
+zhang3	zh a3 ng
+zhang4	zh a4 ng
+zhao1	zh aw1
+zhao2	zh aw2
+zhao3	zh aw3
+zhao4	zh aw4
+zhe0	zh e4
+zhe1	zh e1
+zhe2	zh e2
+zhe3	zh e3
+zhe4	zh e4
+zhei4	zh ey4
+zhen1	zh e1 nT
+zhen3	zh e3 nT
+zhen4	zh e4 nT
+zheng0	zh e4 ng
+zheng2	zh e2 ng
+zheng1	zh e1 ng
+zheng3	zh e3 ng
+zheng4	zh e4 ng
+zhi0	zh IH4
+zhi1	zh IH1
+zhi2	zh IH2
+zhi3	zh IH3
+zhi4	zh IH4
+zhong1	zh o1 ng
+zhong3	zh o3 ng
+zhong4	zh o4 ng
+zhou0	zh ow4
+zhou1	zh ow1
+zhou2	zh ow2
+zhou3	zh ow3
+zhou4	zh ow4
+zhu0	zh u4
+zhu1	zh u1
+zhu2	zh u2
+zhu3	zh u3
+zhu4	zh u4
+zhua1	zh w a1
+zhua3	zh w a3
+zhuai1	zh w ay1
+zhuai3	zh w ay3
+zhuai4	zh w ay4
+zhuan0	zh w a4 nT
+zhuan1	zh w a1 nT
+zhuan3	zh w a3 nT
+zhuan4	zh w a4 nT
+zhuang0	zh w a4 ng
+zhuang1	zh w a1 ng
+zhuang3	zh w a3 ng
+zhuang4	zh w a4 ng
+zhui0	zh w ey4
+zhui1	zh w ey1
+zhui4	zh w ey4
+zhun1	zh w e1 nT
+zhun3	zh w e3 nT
+zhuo1	zh w o1
+zhuo2	zh w o2
+zi0	z I4
+zi1	z I1
+zi2	z I2
+zi3	z I3
+zi4	z I4
+zong0	z o4 ng
+zong2	z o2 ng
+zong1	z o1 ng
+zong3	z o3 ng
+zong4	z o4 ng
+zou1	z ow1
+zou3	z ow3
+zou4	z ow4
+zu1	z u1
+zu2	z u2
+zu3	z u3
+zuan1	z w a1 nT
+zuan3	z w a3 nT
+zuan4	z w a4 nT
+zui1	z w ey1
+zui3	z w ey3
+zui4	z w ey4
+zun1	z w e1 nT
+zun3	z w e3 nT
+zuo0	z w o4
+zuo1	z w o1
+zuo2	z w o2
+zuo3	z w o3
+zuo4	z w o4

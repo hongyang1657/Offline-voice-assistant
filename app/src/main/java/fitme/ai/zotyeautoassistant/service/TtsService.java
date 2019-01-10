@@ -66,7 +66,6 @@ public class TtsService extends Service{
     private synchronized void setEngineState(ENGINESTATE state){
         mEngineState = state;
     }
-    private Intent intentMusic;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -77,7 +76,6 @@ public class TtsService extends Service{
     public void onCreate() {
         super.onCreate();
         initTTS();
-        intentMusic = new Intent(this,MusicPlayerService.class);
         L.i("创建TtsService");
     }
 
@@ -109,13 +107,11 @@ public class TtsService extends Service{
             public void playStart() {
                 Log.i(TAG, "playStart:开始播报 ");
                 //sendBroadcast(TTS_STATE,TTS_PLAY_START);
-                playingmusic(MusicPlayerService.REDUCE_MUSIC_VOLUME);  //减小音乐音量
             }
 
             @Override
             public void playEnd() {
                 Log.i(TAG, "playEnd:播报完成 ");
-                playingmusic(MusicPlayerService.RECOVER_MUSIC_VOLUME);  //恢复音乐音量
                 sendBroadcast(TTS_STATE,TTS_PLAY_END);
                 MyApplication.getInstance().getmFloatingView().hide();
                 //播放队列中的下一句
@@ -150,7 +146,7 @@ public class TtsService extends Service{
 
         @Override
         public void onProgress(int arg1, int arg2) {
-            Log.i(TAG, "ITtsListener -> onProgress : " + arg1 + " , " + arg2);
+            //Log.i(TAG, "ITtsListener -> onProgress : " + arg1 + " , " + arg2);
         }
     };
 
@@ -225,13 +221,6 @@ public class TtsService extends Service{
         intent.putExtra(key,value);
         sendBroadcast(intent);
     }
-
-    private void playingmusic(int type) {
-        //启动服务，播放音乐
-        intentMusic.putExtra("type",type);
-        startService(intentMusic);
-    }
-
 
     private class AudioPlayWorking implements Runnable {
         private final String mTag = "AudioPlayWorking";
