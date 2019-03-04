@@ -22,7 +22,7 @@ public class TimerUtil{
     private Runnable task = new Runnable() {
         @Override
         public void run() {
-            if (nowTime<200){
+            if (nowTime<60){
                 nowTime++;
                 //L.i("计时60秒:"+nowTime);
                 handler.postDelayed(task,1000);
@@ -52,7 +52,8 @@ public class TimerUtil{
 
     //TODO 如需倒计时，改为isTimering
     public boolean getTimerState(){
-        return true;          //TODO 如需倒计时，改为isTimering
+        L.i("是否倒计时："+isTimering);
+        return isTimering;          //TODO 如需倒计时，改为isTimering
     }
 
     public void setOnTimerEndListener(TimerEndListener listener){

@@ -27,10 +27,12 @@ import fitme.ai.zotyeautoassistant.service.TtsService;
 import fitme.ai.zotyeautoassistant.utils.Constants;
 import fitme.ai.zotyeautoassistant.utils.FlightControlContants;
 import fitme.ai.zotyeautoassistant.utils.L;
+import fitme.ai.zotyeautoassistant.utils.PushIflytekResToSDCardTask;
 import fitme.ai.zotyeautoassistant.utils.TimerUtil;
 import fitme.ai.zotyeautoassistant.utils.UDPSocket;
 import fitme.ai.zotyeautoassistant.utils.UDPSocketCommand;
 import fitme.ai.zotyeautoassistant.utils.UDPSocketRec;
+import fitme.ai.zotyeautoassistant.utils.impl.PushResToSDCardListener;
 import fitme.ai.zotyeautoassistant.view.impl.TimerEndListener;
 import fitme.ai.zotyeautoassistant.view.impl.UdpReceiveListener;
 
@@ -66,7 +68,6 @@ public class MainActivity extends Activity{
     private MBroadcastReceiver mBroadcastReceiver;
     private ExecutorService executorService;
     private Intent intentActivateService = null;
-    private Intent intentAsrService = null;
     private Intent intentTtsService = null;
     private Intent intentMessageService = null;
     private ScrollView scrollView;
@@ -85,7 +86,6 @@ public class MainActivity extends Activity{
         setContentView(R.layout.activity_main);
         //初始化
         initView();
-        executorService = Executors.newCachedThreadPool(); //线程池
         findViewById(R.id.bt_test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,15 +94,38 @@ public class MainActivity extends Activity{
         });
         tvLog.setVisibility(View.GONE);
         tvLogLocal.setVisibility(View.VISIBLE);
-        initActivateService();
-        initTtsService();
-        initMessageService();
-        //广播接收
-        mBroadcastReceiver = new MBroadcastReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(FITME_SERVICE_COMMUNICATION);
-        registerReceiver(mBroadcastReceiver,intentFilter);
-        mContext = this;
+        //讯飞本地模型push到sd卡，否则无法初始化
+        new PushIflytekResToSDCardTask(getApplicationContext(), new PushResToSDCardListener() {
+            @Override
+            public void onComplete() {
+                initActivateService();
+                initTtsService();
+                initMessageService();
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(20000);
+                            sendBroadcast(WAKE_UP_STATE,WAKE_UP);
+                            TimerUtil.getInstance().start();    //使用语音唤醒 开始进入倒计时
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }).execute();
+
+        initUDPSocket();
+
+        test();
+    }
+
+    private void test(){
+
+    }
+
+    private void initUDPSocket(){
         //开启UDP服务端
         UDPSocketRec.getInstance().setOnUdpReceiveListener(new UdpReceiveListener() {
             @Override
@@ -120,18 +143,7 @@ public class MainActivity extends Activity{
             }
         });
 
-        executorService.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(20000);
-                    sendBroadcast(WAKE_UP_STATE,WAKE_UP);
-                    TimerUtil.getInstance().start();    //使用语音唤醒 开始进入倒计时
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+
         //开启UDP服务端
         UDPSocket.getInstance().setOnUdpReceiveListener(new UdpReceiveListener() {
             @Override
@@ -168,6 +180,7 @@ public class MainActivity extends Activity{
 
 
     private void initView(){
+        executorService = Executors.newCachedThreadPool(); //线程池
         scrollView = findViewById(R.id.scroll_view);
         tvLog = findViewById(R.id.tv_log_cloud);
         tvLogLocal = findViewById(R.id.tv_log_local);
@@ -177,6 +190,13 @@ public class MainActivity extends Activity{
                 L.i("倒计时结束");
             }
         });
+
+        //广播接收
+        mBroadcastReceiver = new MBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(FITME_SERVICE_COMMUNICATION);
+        registerReceiver(mBroadcastReceiver,intentFilter);
+        mContext = this;
     }
 
     private void initActivateService(){
@@ -202,9 +222,6 @@ public class MainActivity extends Activity{
         if (intentActivateService !=null){
             stopService(intentActivateService);
         }
-        if (intentAsrService!=null){
-            stopService(intentAsrService);
-        }
         if (intentTtsService!=null){
             stopService(intentTtsService);
         }
@@ -212,6 +229,8 @@ public class MainActivity extends Activity{
             stopService(intentMessageService);
         }
         unregisterReceiver(mBroadcastReceiver);
+
+        System.exit(0);
     }
 
     private class MBroadcastReceiver extends BroadcastReceiver{
@@ -292,7 +311,7 @@ public class MainActivity extends Activity{
                         }
                         break;
                     case Constants.CLIMB:
-                        if (resultBean.getIntent_score()>0.9f){
+                        if (resultBean.getIntent_score()>0.96f){
                             control(resultBean.getIntent(),true);
                         }else {
                             defaultChat();

@@ -1,5 +1,7 @@
 package fitme.ai.zotyeautoassistant.utils;
 
+import android.Manifest;
+
 public class Constants {
     public static final String TAG = "debug_message";
     public static final String FITME_SERVICE_COMMUNICATION = "fitme.ai.zotye.service.communication";
@@ -13,6 +15,11 @@ public class Constants {
     public static final String LOG = "log";
     public static final String LOG_LOCAL = "log_local";
     public static final String LOGIN_STATE = "login_state";
+
+    //动态申请权限
+    public static String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ,Manifest.permission.RECORD_AUDIO,Manifest.permission.READ_CONTACTS
+            ,Manifest.permission.WRITE_SETTINGS};
 
     //唤醒状态
     public static final int WAKE_UP = 11;

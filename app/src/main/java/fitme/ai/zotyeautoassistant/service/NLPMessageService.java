@@ -99,7 +99,7 @@ public class NLPMessageService extends Service implements IAppendAudio {
                 time++;
             }else {
                 //关闭floatingView
-                MyApplication.getInstance().getmFloatingView().hide();
+                //MyApplication.getInstance().getmFloatingView().hide();
             }
         }
     };
@@ -186,6 +186,7 @@ public class NLPMessageService extends Service implements IAppendAudio {
         map.put("char2indexMap",char2indexMap);
         map.put("index2charMap",index2charMap);
         dictionaryBean.setDictionary(map);
+        L.i("122222222233333333333333222222");
     }
 
     //广播接收
@@ -202,7 +203,7 @@ public class NLPMessageService extends Service implements IAppendAudio {
                 startRecord();
                 err = libisssr.start("all", ISS_SR_MODE_LOCAL_REC, null);
                 //弹出悬浮窗
-                MyApplication.getInstance().getmFloatingView().show();
+                //MyApplication.getInstance().getmFloatingView().show();
                 //悬浮窗计时归零
                 fvHandler.removeCallbacks(fvTask);
                 time = 0;
@@ -271,7 +272,7 @@ public class NLPMessageService extends Service implements IAppendAudio {
 
                     break;
                 case ASR_STATE_ERROR:
-                    MyApplication.getInstance().getmFloatingView().hide();
+                    //MyApplication.getInstance().getmFloatingView().hide();
                     break;
                 case ASR_STATE_DEFAULT:
                     break;

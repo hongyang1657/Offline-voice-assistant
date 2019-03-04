@@ -32,7 +32,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance=this;
-        mFloatingView = new FloatingView(this);
+        //mFloatingView = new FloatingView(this);
     }
 
     public FloatingView getmFloatingView() {
